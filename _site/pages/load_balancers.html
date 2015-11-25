@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Load balancer integration &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="The Graylog index model explained" href="index_model.html"/>
+        <link rel="prev" title="Blacklisting" href="blacklisting.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Load balancer integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#load-balancer-state">Load balancer state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graceful-shutdown">Graceful shutdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web-interface">Web Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Load balancer integration</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/load_balancers.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="load-balancer-integration">
+<h1>Load balancer integration<a class="headerlink" href="#load-balancer-integration" title="Permalink to this headline">¶</a></h1>
+<p>When running multiple Graylog servers a common deployment scenario is to route the message traffic through an
+IP load balancer. By doing this we can achieve both a highly available setup, as well as increasing message
+processing throughput, by simply adding more servers that operate in parallel.</p>
+<div class="section" id="load-balancer-state">
+<h2>Load balancer state<a class="headerlink" href="#load-balancer-state" title="Permalink to this headline">¶</a></h2>
+<p>However, load balancers usually need some way of determining whether a backend service is reachable and healthy
+or not. For this purpose Graylog exposes a load balancer state that is reachable via its REST API.</p>
+<p>There are two ways the load balancer state can change:</p>
+<ul class="simple">
+<li>due to a lifecycle change (e.g. the server is starting to accept messages, or shutting down)</li>
+<li>due to manual intervention via the REST API</li>
+</ul>
+<p>To query the current load balancer status of a Graylog instance, all you need to do is to issue a HTTP call to its REST API:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">lbstatus</span>
+</pre></div>
+</div>
+<p>The status knows two different states, <code class="docutils literal"><span class="pre">ALIVE</span></code> and <code class="docutils literal"><span class="pre">DEAD</span></code>, which is also the <code class="docutils literal"><span class="pre">text/plain</span></code> response of the
+resource. Additionally, the same information is reflected in the HTTP status codes: If the state is <code class="docutils literal"><span class="pre">ALIVE</span></code>
+the return code will be <code class="docutils literal"><span class="pre">200</span> <span class="pre">OK</span></code>, for <code class="docutils literal"><span class="pre">DEAD</span></code> it will be <code class="docutils literal"><span class="pre">503</span> <span class="pre">Service</span> <span class="pre">unavailable</span></code>. This is done to make
+it easier to configure a wide range of load balancer types and vendors to be able to react to the status.</p>
+<p>The resource is accessible without authentication to make it easier for load balancers to access it.</p>
+<p>To programmatically change the load balancer status, an additional endpoint is exposed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PUT</span> <span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">lbstatus</span><span class="o">/</span><span class="n">override</span><span class="o">/</span><span class="n">alive</span>
+<span class="n">PUT</span> <span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">lbstatus</span><span class="o">/</span><span class="n">override</span><span class="o">/</span><span class="n">dead</span>
+</pre></div>
+</div>
+<p>Only authenticated and authorized users are able to change the status, in the currently released Graylog version
+this means only admin users can change it.</p>
+</div>
+<div class="section" id="graceful-shutdown">
+<h2>Graceful shutdown<a class="headerlink" href="#graceful-shutdown" title="Permalink to this headline">¶</a></h2>
+<p>Often, when running a service behind a load balancer, the goal is to be able to perform zero-downtime upgrades, by
+taking one of the servers offline, upgrading it, and then bringing it back online. During that time the remaining
+servers can take the load seamlessly.</p>
+<p>By using the load balancer status API described above one can already perform such a task. However, it would still be
+guesswork when the Graylog server is done processing all the messages it already accepted.</p>
+<p>For this purpose Graylog supports a graceful shutdown command, also accessible via the web interface and API. It will
+set the load balancer status to <code class="docutils literal"><span class="pre">DEAD</span></code>, stop all inputs, turn on messages processing (should it have been disabled
+manually previously), and flush all messages in memory to Elasticsearch. After all buffers and caches are processed,
+it will shut itself down safely.</p>
+</div>
+<div class="section" id="web-interface">
+<h2>Web Interface<a class="headerlink" href="#web-interface" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to use the Graylog web interface behind a load balancer for high availability purposes.</p>
+<p>However, in order to make the various metrics work in Graylog&#8217;s web interface, you need to enable sticky sessions in your
+load balancer, or configure the second instance to be a failover instance only, which only gets requests in case the
+first instance is no longer reachable.</p>
+<p>There are various terms used for sticky sessions. Session persistence or session management are also in use.</p>
+<p>Please refer to your vendor&#8217;s documentation to learn about how to enable sticky sessions.</p>
+<p>Information for some popular load balancers and their settings can be found through the following links:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elb-sticky-sessions.html">Amazon Web Services ELB</a></li>
+<li><a class="reference external" href="http://blog.haproxy.com/2012/03/29/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/">HAProxy</a></li>
+<li><a class="reference external" href="https://support.f5.com/kb/en-us/products/lc_9_x/manuals/product/lc_config_10_2/lc_persist_profiles.html">F5 BIG-IP</a></li>
+<li><a class="reference external" href="https://support.kemptechnologies.com/hc/en-us/articles/202040855-What-is-persistence-">KEMP</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="index_model.html" class="btn btn-neutral float-right" title="The Graylog index model explained" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="blacklisting.html" class="btn btn-neutral" title="Blacklisting" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

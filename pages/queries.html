@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Searching &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Streams" href="streams.html"/>
+        <link rel="prev" title="Graylog Collector" href="collector.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Searching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#search-query-language">Search query language</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#syntax">Syntax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#escaping">Escaping</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#time-frame-selector">Time frame selector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relative-time-frame-selector">Relative time frame selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#absolute-time-frame-selector">Absolute time frame selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keyword-time-frame-selector">Keyword time frame selector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#saved-searches">Saved searches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#analysis">Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#field-statistics">Field statistics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-values">Quick values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#field-graphs">Field graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#export-results-as-csv">Export results as CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search-result-highlighting">Search result highlighting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#enabling-disabling-search-result-highlighting">Enabling/Disabling search result highlighting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Searching</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/queries.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="searching">
+<h1>Searching<a class="headerlink" href="#searching" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="search-query-language">
+<h2>Search query language<a class="headerlink" href="#search-query-language" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="syntax">
+<h3>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h3>
+<p>The search syntax is very close to the Lucene syntax. By default all message fields are included in the search if you don&#8217;t specify a message
+field to search in.</p>
+<p>Messages that include the term <em>ssh</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ssh</span>
+</pre></div>
+</div>
+<p>Messages that include the term <em>ssh</em> or <em>login</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh login
+</pre></div>
+</div>
+<p>Messages that include the exact phrase <em>ssh login</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;ssh login&quot;</span>
+</pre></div>
+</div>
+<p>Messages where the field <em>type</em> includes <em>ssh</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>type:ssh
+</pre></div>
+</div>
+<p>Messages where the field <em>type</em> includes <em>ssh</em> or <em>login</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>type:(ssh login)
+</pre></div>
+</div>
+<p>Messages where the field <em>type</em> includes the exact phrase <em>ssh login</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>type:&quot;ssh login&quot;
+</pre></div>
+</div>
+<p>Messages that do not have the field <em>type</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>_missing_:type
+</pre></div>
+</div>
+<p>Messages that have the field <em>type</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre>_exists_:type
+</pre></div>
+</div>
+<p>By default all terms or phrases are OR connected so all messages that have at least one hit are returned. You can use
+<strong>Boolean operators and groups</strong> for control over this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&quot;ssh login&quot; AND source:example.org
+(&quot;ssh login&quot; AND (source:example.org OR source:another.example.org)) OR _exists_:always_find_me
+</pre></div>
+</div>
+<p>You can also use the NOT operator:</p>
+<div class="highlight-python"><div class="highlight"><pre>&quot;ssh login&quot; AND NOT source:example.org
+NOT example.org
+</pre></div>
+</div>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>Note that AND, OR, and NOT are case sensitive and must be typed in all upper-case.</p>
+<p><strong>Wildcards:</strong> Use <cite>?</cite> to replace a single character or <cite>*</cite> to replace zero or more characters:</p>
+<div class="highlight-python"><div class="highlight"><pre>source:*.org
+source:exam?le.org
+source:exam?le.*
+</pre></div>
+</div>
+<p><strong>Note that leading wildcards are disabled to avoid excessive memory consumption!</strong> You can enable them in
+your <code class="docutils literal"><span class="pre">graylog-server.conf</span></code>: <code class="docutils literal"><span class="pre">allow_leading_wildcard_searches</span> <span class="pre">=</span> <span class="pre">true</span></code></p>
+<p>Also note that <cite>message</cite>, <cite>full_message</cite>, and <cite>source</cite> are the only fields that can be searched via wildcard by default.</p>
+<p><strong>Fuzziness:</strong> You can search for similar but not equal terms:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh logni~
+source:exmaple.org~
+</pre></div>
+</div>
+<p>This is using the <a class="reference external" href="http://en.wikipedia.org/wiki/Damerau-Levenshtein_distance">Damerau–Levenshtein distance</a> with a default
+distance of <em>2</em>. You can change the distance like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>source:exmaple.org~1
+</pre></div>
+</div>
+<p>You can also use the fuzzyness operator to do a <strong>proximity</strong> search where the terms in a phrase can have different/fuzzy
+distances from each other and don&#8217;t have to be in the defined order:</p>
+<div class="highlight-python"><div class="highlight"><pre>&quot;foo bar&quot;~5
+</pre></div>
+</div>
+<p>Numeric fields support <strong>range queries</strong>. Ranges in square brackets are inclusive, curly brackets are exclusive and can
+even be combined:</p>
+<div class="highlight-python"><div class="highlight"><pre>http_response_code:[500 TO 504]
+http_response_code:{400 TO 404}
+bytes:{0 TO 64]
+http_response_code:[0 TO 64}
+</pre></div>
+</div>
+<p>You can also do searches with one side unbounded:</p>
+<div class="highlight-python"><div class="highlight"><pre>http_response_code:&gt;400
+http_response_code:&lt;400
+http_response_code:&gt;=400
+http_response_code:&lt;=400
+</pre></div>
+</div>
+<p>It is also possible to combine unbounded range operators:</p>
+<div class="highlight-python"><div class="highlight"><pre>http_response_code:(&gt;=400 AND &lt;500)
+</pre></div>
+</div>
+</div>
+<div class="section" id="escaping">
+<h3>Escaping<a class="headerlink" href="#escaping" title="Permalink to this headline">¶</a></h3>
+<p>The following characters must be escaped with a backslash:</p>
+<div class="highlight-python"><div class="highlight"><pre>&amp;&amp; || : \ / + - ! ( ) { } [ ] ^ &quot; ~ * ?
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>resource:\/posts\/45326
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="time-frame-selector">
+<h2>Time frame selector<a class="headerlink" href="#time-frame-selector" title="Permalink to this headline">¶</a></h2>
+<p>The time frame selector defines in what time range to search in. It offers three different ways of selecting a time range and
+is vital for search speed: If you know you are only interested in messages of the last hour, only search in that time frame.
+This will make Graylog search in relevant indices only and greatly reduce system load and required resources. You can read
+more about this here: <a class="reference internal" href="index_model.html"><em>The Graylog index model explained</em></a></p>
+<img alt="../_images/queries_time_range_selector.png" src="../_images/queries_time_range_selector.png" />
+<div class="section" id="relative-time-frame-selector">
+<h3>Relative time frame selector<a class="headerlink" href="#relative-time-frame-selector" title="Permalink to this headline">¶</a></h3>
+<p>The relative time frame selector lets you look for messages from the selected option to the time you hit the search button. The selector
+offers a wide set of relative time frames that fit most of your search needs.</p>
+</div>
+<div class="section" id="absolute-time-frame-selector">
+<h3>Absolute time frame selector<a class="headerlink" href="#absolute-time-frame-selector" title="Permalink to this headline">¶</a></h3>
+<p>When you know exactly the boundaries of your search, you want to use the absolute time frame selector. Simply introduce the dates and
+times for the search manually or click in the input field to open up a calendar where you can choose the day with your mouse.</p>
+</div>
+<div class="section" id="keyword-time-frame-selector">
+<h3>Keyword time frame selector<a class="headerlink" href="#keyword-time-frame-selector" title="Permalink to this headline">¶</a></h3>
+<p>Graylog offers a keyword time frame selector that allows you to specify the time frame for the search in natural language like <em>last hour</em> or <em>last 90 days</em>. The web interface shows a preview of the two actual timestamps that will be used for the search.</p>
+<img alt="../_images/queries_keyword_time_selector.png" src="../_images/queries_keyword_time_selector.png" />
+<p>Here are a few examples for possible values.</p>
+<ul class="simple">
+<li>&#8220;last month&#8221; searches between one month ago and now</li>
+<li>&#8220;4 hours ago&#8221; searches between four hours ago and now</li>
+<li>&#8220;1st of april to 2 days ago&#8221; searches between 1st of April and 2 days ago</li>
+<li>&#8220;yesterday midnight +0200 to today midnight +0200&#8221; searches between yesterday midnight and today midnight in timezone +0200 - will be 22:00 in UTC</li>
+</ul>
+<p>The time frame is parsed using the <a class="reference external" href="http://natty.joestelmach.com/">natty natural language parser</a>. Please consult its documentation for details.</p>
+</div>
+</div>
+<div class="section" id="saved-searches">
+<h2>Saved searches<a class="headerlink" href="#saved-searches" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you may want to search a specific search configuration to be used later. Graylog provides a saved search functionality
+to accomplish exactly that.</p>
+<p>Once you submitted your search, selected the fields you want to show from the search sidebar, and chosen a resolution for the histogram, click on
+the <em>Save search criteria</em> button on the sidebar.</p>
+<img alt="../_images/saved_search_create.png" src="../_images/saved_search_create.png" />
+<p>Give a name to the current search and click on save. When you want to use the saved search later on, you only need to select it from the saved search
+selector.</p>
+<img alt="../_images/saved_search_selector.png" src="../_images/saved_search_selector.png" />
+<p>Of course, you can always update the selected fields or name of your saved search. To do so, select the saved search from the saved search selector,
+update the field selection or histogram resolution, and click on <em>Saved search</em> -&gt; <em>Update search criteria</em>. It is also possible to delete the saved
+search by selecting <em>Saved search</em> -&gt; <em>Delete saved search</em>.</p>
+<img alt="../_images/saved_search_update.png" src="../_images/saved_search_update.png" />
+</div>
+<div class="section" id="analysis">
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h2>
+<p>Graylog provides several tools to analyze your search results. It is possible to save these analysis into dashboards, so you can check them over
+time in a more convenient way. To analyze a field from your search results, expand the field in the search sidebar and click on the button of the
+analysis you want to perform.</p>
+<img alt="../_images/search_analysis.png" src="../_images/search_analysis.png" />
+<div class="section" id="field-statistics">
+<span id="id3"></span><h3>Field statistics<a class="headerlink" href="#field-statistics" title="Permalink to this headline">¶</a></h3>
+<p>Compute different statistics on your fields, to help you better summarize and understand the data in them.</p>
+<p>The statistical information consist of: total, mean, minimum, maximum, standard deviation, variance, sum, and cardinality. On non-numeric fields,
+you can only see the total amount of messages containing that field, and the cardinality of the field, i.e. the number of unique values it has.</p>
+<img alt="../_images/field_statistics.png" src="../_images/field_statistics.png" />
+</div>
+<div class="section" id="quick-values">
+<span id="id4"></span><h3>Quick values<a class="headerlink" href="#quick-values" title="Permalink to this headline">¶</a></h3>
+<p>Quick values helps you to find out the distribution of values for a field. Alongside a graphic representation of the common values contained
+in a field, Graylog will display a table with all different values, allowing you to see the number of times they appear. You can include any value
+in your search query by clicking on the magnifying glass icon located in the value row.</p>
+<img alt="../_images/quick_values.png" src="../_images/quick_values.png" />
+</div>
+<div class="section" id="field-graphs">
+<span id="id5"></span><h3>Field graphs<a class="headerlink" href="#field-graphs" title="Permalink to this headline">¶</a></h3>
+<p>You can create field graphs for any numeric field, by clicking on the <em>Generate chart</em> button in the search sidebar. Using the options in the
+<em>Customize</em> menu on top of the field graph, you can change the statistical function used in the graph, the kind of graph to use to represent
+the values, the graph interpolation, as well as the time resolution.</p>
+<img alt="../_images/field_graph.png" src="../_images/field_graph.png" />
+<p>Once you have customized some field graphs, you can also combine them by dragging them from the hamburger icon on the top corner of the graph,
+and dropping them into another field graph. You can see the location of the hamburger icon and the end result in the the following
+screenshots:</p>
+<img alt="../_images/stacked_graph_1.png" src="../_images/stacked_graph_1.png" />
+<img alt="../_images/stacked_graph_2.png" src="../_images/stacked_graph_2.png" />
+<p>Field graphs appear every time you perform a search, allowing you to compare data, or combine graphs coming from different streams.</p>
+</div>
+</div>
+<div class="section" id="export-results-as-csv">
+<h2>Export results as CSV<a class="headerlink" href="#export-results-as-csv" title="Permalink to this headline">¶</a></h2>
+<p>It is also possible to export the results of your search as a CSV document. To do so, select all fields you want to export in the search
+sidebar, click on the <em>More actions</em> button, and select <em>Export as CSV</em>.</p>
+<img alt="../_images/export_as_csv.png" src="../_images/export_as_csv.png" />
+<p><strong>Hint</strong>: Some Graylog inputs keep the original message in the the <cite>full_message</cite> field. If you need to export the original message, you
+can do so by clicking on the <em>List all fields</em> link at the bottom of the sidebar, and then selecting the <cite>full_message</cite> field.</p>
+</div>
+<div class="section" id="search-result-highlighting">
+<h2>Search result highlighting<a class="headerlink" href="#search-result-highlighting" title="Permalink to this headline">¶</a></h2>
+<p>Graylog supports search result highlighting since v0.20.2:</p>
+<img alt="../_images/search_result_highlighting.png" src="../_images/search_result_highlighting.png" />
+<div class="section" id="enabling-disabling-search-result-highlighting">
+<h3>Enabling/Disabling search result highlighting<a class="headerlink" href="#enabling-disabling-search-result-highlighting" title="Permalink to this headline">¶</a></h3>
+<p>Using search result highlighting will result in slightly higher resource consumption of searches. You can enable and disable
+it using a configuration parameter in the <code class="docutils literal"><span class="pre">graylog.conf</span></code> of your <code class="docutils literal"><span class="pre">graylog-server</span></code> nodes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">allow_highlighting</span> <span class="o">=</span> <span class="n">true</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="streams.html" class="btn btn-neutral float-right" title="Streams" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="collector.html" class="btn btn-neutral" title="Graylog Collector" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

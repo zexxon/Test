@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Graylog Marketplace &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Frequently asked questions" href="faq.html"/>
+        <link rel="prev" title="External dashboards" href="external_dashboards.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Graylog Marketplace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#github-integration">GitHub integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-best-practices">General best practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#readme-content">README content</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#types-of-add-ons">4 Types of Add-Ons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-plug-ins">Contributing plug-ins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-content-packs">Contributing content packs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-gelf-libraries">Contributing GELF libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-other-content">Contributing other content</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Graylog Marketplace</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/marketplace.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="graylog-marketplace">
+<h1>Graylog Marketplace<a class="headerlink" href="#graylog-marketplace" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="http://marketplace.graylog.org">Graylog Marketplace</a> is the central directory
+of add-ons for Graylog. It contains plugins, content packs, GELF libraries and
+more content built by Graylog developers and community members.</p>
+<img alt="../_images/marketplace.png" src="../_images/marketplace.png" />
+<div class="section" id="github-integration">
+<h2>GitHub integration<a class="headerlink" href="#github-integration" title="Permalink to this headline">¶</a></h2>
+<p>The Marketplace is deeply integrated with GitHub. You sign-in with your GitHub
+account if you want to submit content and only have to select an existing
+repository to list on the Marketplace.</p>
+<p>From there on you manage your releases and code changes in GitHub. The Marketplace
+will automatically update your content.</p>
+<p>There is no need to sign-in if you only want to browse or download content.</p>
+</div>
+<div class="section" id="general-best-practices">
+<h2>General best practices<a class="headerlink" href="#general-best-practices" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="readme-content">
+<span id="mpreadme"></span><h3>README content<a class="headerlink" href="#readme-content" title="Permalink to this headline">¶</a></h3>
+<p>We kindly ask you to provide an as descriptive as possible <code class="docutils literal"><span class="pre">README</span></code> file with your
+submission. This
+file will be displayed on the Marketplace detail page and should provide the following
+information:</p>
+<ul class="simple">
+<li>What is it.</li>
+<li>Why would you want to use it? (Use cases)</li>
+<li>Do you have to register somewhere to get for example an API token?</li>
+<li>How to install and configure it.</li>
+<li>How to use it in a Graylog context.</li>
+</ul>
+<p>Take a look at the <a class="reference external" href="https://marketplace.graylog.org/addons/974efcc3-8d78-4847-becd-0f26821d2646">Splunk plug-in</a>
+as an example.</p>
+<p>The README supports <a class="reference external" href="http://daringfireball.net/projects/markdown">Markdown</a>
+for formatting. You cannot submit content that does not contain a <code class="docutils literal"><span class="pre">README</span></code> file.</p>
+</div>
+<div class="section" id="license">
+<span id="mplicense"></span><h3>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h3>
+<p>You cannot submit content that does not contain a <code class="docutils literal"><span class="pre">LICENSE</span></code> or <code class="docutils literal"><span class="pre">COPYING</span></code> file.
+We recommend to consult <a class="reference external" href="http://choosealicense.com">ChooseALicense.com</a> if you are
+unsure which license to use.</p>
+</div>
+</div>
+<div class="section" id="types-of-add-ons">
+<h2>4 Types of Add-Ons<a class="headerlink" href="#types-of-add-ons" title="Permalink to this headline">¶</a></h2>
+<p>Plug-Ins: Code that extends Graylog to support a specific use case that it doesn’t support out of the box.</p>
+<p>Content Pack: A file that can be uploaded into your Graylog system that sets up streams, inputs, extractors, dashboards, etc. to support a given log source or use case.</p>
+<p>GELF Library: A library for a programming language or logging framework that supports sending log messages in GELF format for easy integration and pre-structured messages.</p>
+<p>Other Solutions: Any other content or guide that helps you integrate Graylog with an external system or device. For example, how to configure a specific device to support a format Graylog understands out of the box.</p>
+</div>
+<div class="section" id="contributing-plug-ins">
+<h2>Contributing plug-ins<a class="headerlink" href="#contributing-plug-ins" title="Permalink to this headline">¶</a></h2>
+<p>You <a class="reference internal" href="plugins.html#plugins"><span>created a Graylog plugin</span></a> and want to list it in the
+Marketplace? This is great. Here are the simple steps to follow:</p>
+<ol class="arabic simple">
+<li>Create a GitHub repository for your plugin</li>
+<li>Include a <a class="reference internal" href="#mpreadme"><span>README</span></a> and a <a class="reference internal" href="#mplicense"><span>LICENSE</span></a> file in
+the repository.</li>
+<li>Push all your code to the repository.</li>
+<li><a class="reference external" href="https://help.github.com/articles/creating-releases/">Create a GitHub release</a>
+and give it the name of the plugin version. For example <code class="docutils literal"><span class="pre">0.1</span></code>. The
+Marketplace will always show and link the latest version. You can upload
+as many release artifacts as you want here. For example the <code class="docutils literal"><span class="pre">.jar</span></code> file
+together with <code class="docutils literal"><span class="pre">DEB</span></code> and <code class="docutils literal"><span class="pre">RPM</span></code> files. The Marketplace will link to the
+detail page of a release for downloads.</li>
+<li>Submit the repository to the Marketplace</li>
+</ol>
+</div>
+<div class="section" id="contributing-content-packs">
+<h2>Contributing content packs<a class="headerlink" href="#contributing-content-packs" title="Permalink to this headline">¶</a></h2>
+<p>Graylog content packs can be shared on the Marketplace by following these steps:</p>
+<ol class="arabic simple">
+<li>Export a Graylog content pack from the Graylog Web Interface and save the
+generated JSON in a file called <code class="docutils literal"><span class="pre">content_pack.json</span></code>.</li>
+<li>Create a GitHub repository for your content pack</li>
+<li>Include a <a class="reference internal" href="#mpreadme"><span>README</span></a> and a <a class="reference internal" href="#mplicense"><span>LICENSE</span></a> file in
+the repository.</li>
+<li>Include the <code class="docutils literal"><span class="pre">content_pack.json</span></code> file in the root of your GitHub repository.</li>
+<li>Submit the repository to the Marketplace</li>
+</ol>
+</div>
+<div class="section" id="contributing-gelf-libraries">
+<h2>Contributing GELF libraries<a class="headerlink" href="#contributing-gelf-libraries" title="Permalink to this headline">¶</a></h2>
+<p>A GELF library can be added like this:</p>
+<ol class="arabic simple">
+<li>Create a GitHub repository for your GELF library.</li>
+<li>Include a <a class="reference internal" href="#mpreadme"><span>README</span></a> and a <a class="reference internal" href="#mplicense"><span>LICENSE</span></a> file in
+the repository.</li>
+<li>Describe where to download and how to use the GELF library in the <code class="docutils literal"><span class="pre">README</span></code>.</li>
+</ol>
+</div>
+<div class="section" id="contributing-other-content">
+<h2>Contributing other content<a class="headerlink" href="#contributing-other-content" title="Permalink to this headline">¶</a></h2>
+<p>You want to contribute content that does not really fit into the other categories
+but describes how to integrate a certain system or make it send messages to Graylog?</p>
+<p>This is how you can do it:</p>
+<ol class="arabic simple">
+<li>Create a GitHub repository for your content</li>
+<li>Include a <a class="reference internal" href="#mpreadme"><span>README</span></a> and a <a class="reference internal" href="#mplicense"><span>LICENSE</span></a> file in
+the repository.</li>
+<li>All content goes into the <code class="docutils literal"><span class="pre">README</span></code>.</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently asked questions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="external_dashboards.html" class="btn btn-neutral" title="External dashboards" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

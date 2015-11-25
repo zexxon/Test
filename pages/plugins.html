@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Plugins &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="External dashboards" href="external_dashboards.html"/>
+        <link rel="prev" title="External authentication" href="users_and_roles/external_auth.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-information">General information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-plugin-skeleton">Creating a plugin skeleton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#change-some-default-values">Change some default values</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-alarm-callback-plugin">Example Alarm Callback plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#registering-the-plugin">Registering the plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-plugins">Building plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-and-loading-plugins">Installing and loading plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Plugins</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/plugins.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="plugins">
+<span id="id1"></span><h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general-information">
+<h2>General information<a class="headerlink" href="#general-information" title="Permalink to this headline">¶</a></h2>
+<p>Graylog comes with a stable plugin API for the following plugin types since Graylog 1.0:</p>
+<ul class="simple">
+<li><strong>Inputs:</strong> Accept/write any messages into Graylog</li>
+<li><strong>Outputs:</strong> Forward messages to other endpoints in real-time</li>
+<li><strong>Services:</strong> Run at startup and able to implement any functionality</li>
+<li><strong>Alarm Callbacks:</strong> Called when a stream alert condition has been triggered</li>
+<li><strong>Filters:</strong> Transform/drop incoming messages during processing</li>
+<li><strong>REST API Resources:</strong> A REST resource to expose as part of the <code class="docutils literal"><span class="pre">graylog-server</span></code> REST API</li>
+<li><strong>Periodical:</strong> Called at periodical intervals during server runtime</li>
+</ul>
+<p>The first for writing a plugin is creating a skeleton that is the same for each type of plugin. The next chapter
+is explaining how to do this and will then go over to chapters explaining plugin types in detail.</p>
+</div>
+<div class="section" id="creating-a-plugin-skeleton">
+<h2>Creating a plugin skeleton<a class="headerlink" href="#creating-a-plugin-skeleton" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to get started is to use our <a class="reference external" href="http://maven.apache.org/guides/introduction/introduction-to-archetypes.html">maven archetype</a>
+that will create a complete plugin project infrastructure will all required classes, build definitions, and configurations using an interactive wizard.</p>
+<p>Maven is a Java widely used build tool that comes pre-installed on many operating systems or can be installed using most package managers. Make sure that it
+is installed with at least version 3 before you go on.</p>
+<p>Use it like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mvn archetype:generate -DarchetypeGroupId=org.graylog -DarchetypeArtifactId=graylog-plugin-archetype
+</pre></div>
+</div>
+<p>It wil ask you a few questions about the plugin you are planning to build. Let&#8217;s say you work for a company called ACMECorp and want to build
+an alarm callback plugin that creates a JIRA ticket for each alarm that is triggered:</p>
+<div class="highlight-python"><div class="highlight"><pre>groupId: com.acmecorp
+artifactId: jira-alarmcallback
+version: 1.0.0
+package: com.acmecorp
+pluginClassName: JiraAlarmCallback
+</pre></div>
+</div>
+<p>Note that you do not have to tell the archetype wizard what kind of plugin you want to build because it is creating the generic plugin
+skeleton for you but nothing that is related to the actual implementation. More on this in the example plugin chapters later.</p>
+<p>You now have a new folder called <code class="docutils literal"><span class="pre">jira-alarmcallback</span></code> that includes a complete plugin skeleton including Maven build files. Every Java IDE
+out there can now import the project automatically without any required further configuration.</p>
+<p>In <a class="reference external" href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> for example you can just use the <em>File -&gt; Open</em> dialog to open the skeleton as a fully
+configured Java project.</p>
+<div class="section" id="change-some-default-values">
+<h3>Change some default values<a class="headerlink" href="#change-some-default-values" title="Permalink to this headline">¶</a></h3>
+<p>Open the <code class="docutils literal"><span class="pre">JiraAlarmCallbackMetaData.java</span></code> file and customize the default values like the plugin description, the website URI, and so on.
+Especially the author name etc. should be changed.</p>
+<p>Now go on with implementing the actual login in one of the example plugin chapters below.</p>
+</div>
+</div>
+<div class="section" id="example-alarm-callback-plugin">
+<h2>Example Alarm Callback plugin<a class="headerlink" href="#example-alarm-callback-plugin" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s assume you still want to build the mentioned JIRA AlarmCallback plugin. First open the <code class="docutils literal"><span class="pre">JiraAlarmCallback.java</span></code> file and let it implement
+the <code class="docutils literal"><span class="pre">AlarmCallback</span></code> interface:</p>
+<div class="highlight-python"><div class="highlight"><pre>public class JiraAlarmCallback implements AlarmCallback
+</pre></div>
+</div>
+<p>Your IDE should offer you to create the methods you need to implement:</p>
+<p><strong>public void initialize(Configuration configuration) throws AlarmCallbackConfigurationException</strong></p>
+<p>This is called once at the very beginning of the lifecycle of this plugin. It is common practive to store the <code class="docutils literal"><span class="pre">Configuration</span></code> as a private member
+for later access.</p>
+<p><strong>public void call(Stream stream, AlertCondition.CheckResult checkResult) throws AlarmCallbackException</strong></p>
+<p>This is the actual alarm callback being triggered. Implement your login that creates a JIRA ticket here.</p>
+<p><strong>public ConfigurationRequest getRequestedConfiguration()</strong></p>
+<p>Plugins can request configurations. The UI in the Graylog web interface is generated from this information and the filled out configuration values
+are passed back to the plugin in <code class="docutils literal"><span class="pre">initialize(Configuration</span> <span class="pre">configuration)</span></code>.</p>
+<p>This is an example configuration request:</p>
+<div class="highlight-python"><div class="highlight"><pre>final ConfigurationRequest configurationRequest = new ConfigurationRequest();
+configurationRequest.addField(new TextField(
+        &quot;service_key&quot;, &quot;Service key&quot;, &quot;&quot;, &quot;JIRA API token. You can find this token in your account settings.&quot;,
+        ConfigurationField.Optional.NOT_OPTIONAL)); // required, must be filled out
+configurationRequest.addField(new BooleanField(
+        &quot;use_https&quot;, &quot;HTTPs&quot;, true,
+        &quot;Use HTTP for API communication?&quot;));
+</pre></div>
+</div>
+<p><strong>public String getName()</strong></p>
+<p>Return a human readable name of this plugin.</p>
+<p><strong>public Map&lt;String, Object&gt; getAttributes()</strong></p>
+<p>Return attributes that might be interesting to be shown under the alarm callback in the Graylog web interface. It is common practice to at least
+return the used configuration here.</p>
+<p><strong>public void checkConfiguration() throws ConfigurationException</strong></p>
+<p>Throw a <code class="docutils literal"><span class="pre">ConfigurationException</span></code> if the user should have entered missing or invalid configuration parameters.</p>
+<div class="section" id="registering-the-plugin">
+<h3>Registering the plugin<a class="headerlink" href="#registering-the-plugin" title="Permalink to this headline">¶</a></h3>
+<p>You now have to register your plugin in the <code class="docutils literal"><span class="pre">JiraAlarmCallbackModule.java</span></code> file to make <code class="docutils literal"><span class="pre">graylog-server</span></code> load the alarm callback when launching. The
+reason for the manual registering is that a plugin could consist of multiple plugin types. Think of the generated plugin file as a bundle of
+multiple plugins.</p>
+<p>Register your new plugin using the <code class="docutils literal"><span class="pre">configure()</span></code> method:</p>
+<div class="highlight-python"><div class="highlight"><pre>@Override
+protected void configure() {
+    addAlarmCallback(JiraAlarmCallback.class);
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="building-plugins">
+<h2>Building plugins<a class="headerlink" href="#building-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Building the plugin is easy because the archetype has created all necessary files and settings for you. Just run <code class="docutils literal"><span class="pre">mvn</span> <span class="pre">package</span></code> from the plugin
+directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mvn package
+</pre></div>
+</div>
+<p>This will generate a <code class="docutils literal"><span class="pre">.jar</span></code> file in <code class="docutils literal"><span class="pre">target/</span></code> that is the complete plugin file:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ls target/jira-alarmcallback-1.0.0-SNAPSHOT.jar
+target/jira-alarmcallback-1.0.0-SNAPSHOT.jar
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-and-loading-plugins">
+<h2>Installing and loading plugins<a class="headerlink" href="#installing-and-loading-plugins" title="Permalink to this headline">¶</a></h2>
+<p>The only thing you need to do to run the plugin in Graylog is to copy the <code class="docutils literal"><span class="pre">.jar</span></code> file to your plugins folder that is configured in your
+<code class="docutils literal"><span class="pre">graylog.conf</span></code>. The default is just <code class="docutils literal"><span class="pre">plugins/</span></code> relative from your <code class="docutils literal"><span class="pre">graylog-server</span></code> directory.</p>
+<p>Restart <code class="docutils literal"><span class="pre">graylog-server</span></code> and the plugin should be available to use from the web interface immediately.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="external_dashboards.html" class="btn btn-neutral float-right" title="External dashboards" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="users_and_roles/external_auth.html" class="btn btn-neutral" title="External authentication" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

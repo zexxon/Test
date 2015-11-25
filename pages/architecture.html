@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Architectural considerations &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Getting Started" href="getting_started.html"/>
+        <link rel="prev" title="Welcome to the Graylog documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Architectural considerations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#minimum-setup">Minimum setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bigger-production-setup">Bigger production setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#highly-available-setup-with-graylog-radio">Highly available setup with Graylog Radio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Architectural considerations</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/architecture.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="architectural-considerations">
+<h1>Architectural considerations<a class="headerlink" href="#architectural-considerations" title="Permalink to this headline">¶</a></h1>
+<p>There are a few rules of thumb when scaling resources for Graylog:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">graylog-server</span></code> nodes should have a focus on CPU power.</li>
+<li>Elasticsearch nodes should have as much RAM as possible and the fastest disks you can get.
+Everything depends on I/O speed here.</li>
+<li>MongoDB is only being used to store configuration and the dead letter messages, and can be
+sized fairly small.</li>
+<li><code class="docutils literal"><span class="pre">graylog-web-interface</span></code> nodes are mostly waiting for HTTP answers of the rest of the system
+and can also be rather small.</li>
+<li><code class="docutils literal"><span class="pre">graylog-radio</span></code> nodes act as workers. They don&#8217;t know each other and you can shut them down
+at any point in time without changing the cluster state at all.</li>
+</ul>
+<p>Also keep in mind that messages are <strong>only</strong> stored in Elasticsearch. If you have data loss on
+Elasticsearch, the messages are gone - except if you have created backups of the indices.</p>
+<p>MongoDB is only storing meta information and will be abstracted with a general database layer
+in future versions. This will allow you to use other databases like MySQL instead.</p>
+<div class="section" id="minimum-setup">
+<h2>Minimum setup<a class="headerlink" href="#minimum-setup" title="Permalink to this headline">¶</a></h2>
+<p>This is a minimum Graylog setup that can be used for smaller, non-critical, or test setups.
+None of the components is redundant but it is easy and quick to setup.</p>
+<img alt="../_images/simple_setup.png" src="../_images/simple_setup.png" />
+</div>
+<div class="section" id="bigger-production-setup">
+<h2>Bigger production setup<a class="headerlink" href="#bigger-production-setup" title="Permalink to this headline">¶</a></h2>
+<p>This is a setup for bigger production environments. It has several <code class="docutils literal"><span class="pre">graylog-server</span></code> nodes behind
+a load balancer that share the processing load. The load balancer can ping the <code class="docutils literal"><span class="pre">graylog-server</span></code>
+nodes via REST/HTTP to check if they are alive and take dead nodes out of the cluster.</p>
+<img alt="../_images/extended_setup.png" src="../_images/extended_setup.png" />
+</div>
+<div class="section" id="highly-available-setup-with-graylog-radio">
+<h2>Highly available setup with Graylog Radio<a class="headerlink" href="#highly-available-setup-with-graylog-radio" title="Permalink to this headline">¶</a></h2>
+<p>Beginning with Graylog 1.0 on, we no longer recommend running Graylog Radio because we are now using a
+high-performant message journal (from the Apache Kafka project) in every <cite>graylog-server</cite> instance which is
+spooling all incoming messages to disk immediately and is able to buffer load spikes just at least as good as
+Graylog Radio was, but with less dependencies and maintenance overhead.</p>
+<p>If you are running a setup with Graylog Radio we recommend to shut down the Graylog Radio architecture
+including AMQP or Kafka brokers completely and directly send messages to the <cite>graylog-server</cite> nodes.
+If you have been using Graylog Radio for load balancing, you should now put a classic load balancer in front
+of your <cite>graylog-server</cite> nodes.</p>
+<p><strong>This approach has been proven to work great in large high-throughput setups of several of our large scale
+customers and immensely reduced complexity of their setups.</strong></p>
+<p>The Kafka and AMQP inputs are still supported and can be used to build a custom setup using message brokers,
+if you want to keep using that. A reason for this might be that Graylog is not the only subscriber to the
+messages on the bus. However we would recommend to use Graylog forwarders to either write to a message bus
+after processing or write to other systems directly.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to the Graylog documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,888 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Graylog Collector &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Searching" href="queries.html"/>
+        <link rel="prev" title="Sending in log data" href="sending_data.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Graylog Collector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#linux-unix">Linux/Unix</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#operating-system-packages">Operating System Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#manual-setup">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#global-settings">Global Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-settings">Input Settings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#file-input">File Input</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#windows-eventlog-input">Windows Eventlog Input</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#output-settings">Output Settings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gelf-output">GELF Output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stdout-output">STDOUT Output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#static-message-fields">Static Message Fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-output-routing">Input/Output Routing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-graylog-collector">Running Graylog Collector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Linux/Unix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collector-status">Collector Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Linux/Unix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correctly-configured-collector-log-sample">Correctly Configured Collector Log Sample</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unable-to-send-heartbeat">Unable to send heartbeat</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Graylog Collector</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/collector.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="graylog-collector">
+<span id="id1"></span><h1>Graylog Collector<a class="headerlink" href="#graylog-collector" title="Permalink to this headline">¶</a></h1>
+<p>Graylog Collector is a lightweight Java application that allows you to forward data from log files to a Graylog cluster. The collector can read local log files and also
+Windows Events natively, it then can forward the log messages over the network using the <a class="reference external" href="https://www.graylog.org/resources/gelf/">GELF format</a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="linux-unix">
+<h3>Linux/Unix<a class="headerlink" href="#linux-unix" title="Permalink to this headline">¶</a></h3>
+<p>You need to have Java &gt;= 7 installed to run the collector.</p>
+<div class="section" id="operating-system-packages">
+<h4>Operating System Packages<a class="headerlink" href="#operating-system-packages" title="Permalink to this headline">¶</a></h4>
+<p>We offer official package repositories for the following operating systems.</p>
+<ul class="simple">
+<li>Ubuntu 12.04, 14.04</li>
+<li>Debian 8</li>
+<li>CentOS 7</li>
+</ul>
+<p>Please open an <a class="reference external" href="https://github.com/Graylog2/fpm-recipes/issues">issue</a> in the <a class="reference external" href="https://github.com/Graylog2/fpm-recipes">Github repository</a> if you
+run into any packaging related issues. <strong>Thank you!</strong></p>
+<p><strong>Ubuntu 14.04</strong></p>
+<p>Download and install <a class="reference external" href="https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-ubuntu14.04_latest.deb">graylog-collector-latest-repository-ubuntu14.04_latest.deb</a>
+via <code class="docutils literal"><span class="pre">dpkg(1)</span></code> and also make sure that the <code class="docutils literal"><span class="pre">apt-transport-https</span></code> package is installed:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-ubuntu14.04_latest.deb
+$ sudo dpkg -i graylog-collector-latest-repository-ubuntu14.04_latest.deb
+$ sudo apt-get install apt-transport-https
+$ sudo apt-get update
+$ sudo apt-get install graylog-collector
+</pre></div>
+</div>
+<p><strong>Ubuntu 12.04</strong></p>
+<p>Download and install <a class="reference external" href="https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-ubuntu12.04_latest.deb">graylog-collector-latest-repository-ubuntu12.04_latest.deb</a>
+via <code class="docutils literal"><span class="pre">dpkg(1)</span></code> and also make sure that the <code class="docutils literal"><span class="pre">apt-transport-https</span></code> package is installed:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-ubuntu12.04_latest.deb
+$ sudo dpkg -i graylog-collector-latest-repository-ubuntu12.04_latest.deb
+$ sudo apt-get install apt-transport-https
+$ sudo apt-get update
+$ sudo apt-get install graylog-collector
+</pre></div>
+</div>
+<p><strong>Debian 8</strong></p>
+<p>Download and install <a class="reference external" href="https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-debian8_latest.deb">graylog-collector-latest-repository-debian8_latest.deb</a>
+via <code class="docutils literal"><span class="pre">dpkg(1)</span></code> and also make sure that the <code class="docutils literal"><span class="pre">apt-transport-https</span></code> package is installed:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-debian8_latest.deb
+$ sudo dpkg -i graylog-collector-latest-repository-debian8_latest.deb
+$ sudo apt-get install apt-transport-https
+$ sudo apt-get update
+$ sudo apt-get install graylog-collector
+</pre></div>
+</div>
+<p><strong>CentOS 7</strong></p>
+<p>Download and install <a class="reference external" href="https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-el7_latest.rpm">graylog-collector-latest-repository-el7_latest.rpm</a>
+via <code class="docutils literal"><span class="pre">rpm(8)</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo rpm -Uvh https://packages.graylog2.org/repo/packages/graylog-collector-latest-repository-el7_latest.rpm
+$ sudo yum install graylog-collector
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-setup">
+<h4>Manual Setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li>Download the latest collector release. (find download links in the <a class="reference external" href="https://github.com/Graylog2/collector#binary-download">collector repository README</a>)</li>
+<li>Unzip collector tgz file to target location</li>
+<li>cp <code class="docutils literal"><span class="pre">config/collector.conf.example</span></code> to <code class="docutils literal"><span class="pre">config/collector.conf</span></code></li>
+<li>Update server-url in collector.conf to correct Graylog server address (required for registration)</li>
+<li>Update file input configuration with the correct log files</li>
+<li>Update outputs-&gt;gelf-tcp with the correct Graylog server address (required for sending GELF messages)</li>
+</ol>
+<p><strong>Note:</strong> The collector will not start properly if you do not set the URL or the correct input log files and GELF output configuration</p>
+</div>
+</div>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>You need to have Java &gt;= 7 installed to run the collector.</p>
+<p>Download a release zip file from the <a class="reference external" href="https://github.com/Graylog2/collector#binary-download">collector repository README</a>. Unzip the collector zip file to target location.</p>
+<img alt="../_images/collector_win_install_1.png" src="../_images/collector_win_install_1.png" />
+<p>Change into the extracted collector directory and create a collector configuration file in <code class="docutils literal"><span class="pre">config\collector.conf</span></code>.</p>
+<img alt="../_images/collector_win_install_2.png" src="../_images/collector_win_install_2.png" />
+<p>The following configuration file shows a good starting point for Windows systems. It collects the <em>Application</em>, <em>Security</em>, and <em>System</em> event logs.
+Replace the <code class="docutils literal"><span class="pre">&lt;your-graylog-server-ip&gt;</span></code> with the IP address of your Graylog server.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>server-url = &quot;http://&lt;your-graylog-server-ip&gt;:12900/&quot;
+
+inputs {
+  win-eventlog-application {
+    type = &quot;windows-eventlog&quot;
+    source-name = &quot;Application&quot;
+    poll-interval = &quot;1s&quot;
+  }
+  win-eventlog-system {
+    type = &quot;windows-eventlog&quot;
+    source-name = &quot;System&quot;
+    poll-interval = &quot;1s&quot;
+  }
+  win-eventlog-security {
+    type = &quot;windows-eventlog&quot;
+    source-name = &quot;Security&quot;
+    poll-interval = &quot;1s&quot;
+  }
+}
+
+outputs {
+  gelf-tcp {
+    type = &quot;gelf&quot;
+    host = &quot;&lt;your-graylog-server-ip&gt;&quot;
+    port = 12201
+  }
+}
+</pre></div>
+</div>
+<p>Start a <code class="docutils literal"><span class="pre">cmd.exe</span></code>, change to the collector installation path and execute the following commands to install the collector as Windows service.</p>
+<p>Commands:</p>
+<div class="highlight-python"><div class="highlight"><pre>C:\&gt; cd graylog-collector-0.2.2
+C:\graylog-collector-0.2.2&gt; bin\graylog-collector-service.bat install GraylogCollector
+C:\graylog-collector-0.2.2&gt; bin\graylog-collector-service.bat start GraylogCollector
+</pre></div>
+</div>
+<img alt="../_images/collector_win_install_3.png" src="../_images/collector_win_install_3.png" />
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>You will need a configuration file before starting the collector. The configuration file is written in the <a class="reference external" href="https://github.com/typesafehub/config/blob/master/HOCON.md">HOCON format</a> which is a human-optimized version of JSON.</p>
+<p>If you choose the operating system installation method, the configuration file defaults to <code class="docutils literal"><span class="pre">/etc/graylog/collector/collector.conf</span></code>. For the manual installation method you have to pass the path to the configuration to the start script. (see <a class="reference internal" href="#running-graylog-collector"><span>Running Graylog Collector</span></a>)</p>
+<p>Here is a minimal configuration example that collects logs from the <code class="docutils literal"><span class="pre">/var/log/syslog</span></code> file and sends them to a Graylog server:</p>
+<div class="highlight-python"><div class="highlight"><pre>server-url = &quot;http://10.0.0.1:12900/&quot;
+
+inputs {
+  syslog {
+    type = &quot;file&quot;
+    path = &quot;/var/log/syslog&quot;
+  }
+}
+
+outputs {
+  graylog-server {
+    type = &quot;gelf&quot;
+    host = &quot;10.0.0.1&quot;
+    port = 12201
+  }
+}
+</pre></div>
+</div>
+<p>There are a few global settings available as well as several sections which configure different subsystems of the collector.</p>
+<div class="section" id="global-settings">
+<h3>Global Settings<a class="headerlink" href="#global-settings" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">server-url</span></code> - The API URL of the Graylog server</dt>
+<dd><p class="first">Used to send a heartbeat to the Graylog server.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;http://localhost:12900&quot;</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">enable-registration</span></code> - Enable heartbeat registration</dt>
+<dd><p class="first">Enables the heartbeat registration with the Graylog server. The collector will not contact the Graylog server API for heartbeat registration if this is set to <code class="docutils literal"><span class="pre">false</span></code>.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">true</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">collector-id</span></code> - Unique collector ID setting</dt>
+<dd><p class="first">The ID used to identify this collector. Can be either a string which is used as ID, or the location of a file if prefixed with <code class="docutils literal"><span class="pre">file:</span></code>. If the file does not exist, an ID will be generated and written to that file. If it exists, it is expected to contain a single string without spaces which will be used for the ID.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;file:config/collector-id&quot;</span></code>)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="input-settings">
+<h3>Input Settings<a class="headerlink" href="#input-settings" title="Permalink to this headline">¶</a></h3>
+<p>The input settings need to be nested in a <code class="docutils literal"><span class="pre">input</span> <span class="pre">{</span> <span class="pre">}</span></code> block. Each input has an ID and a type:</p>
+<div class="highlight-python"><div class="highlight"><pre>inputs {
+  syslog {         // =&gt; The input ID
+    type = &quot;file&quot;  // =&gt; The input type
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>An input ID needs to be unique among all configured inputs. If there are two inputs with the same ID, the last one wins.</p>
+<p>The following input types are available.</p>
+<div class="section" id="file-input">
+<h4>File Input<a class="headerlink" href="#file-input" title="Permalink to this headline">¶</a></h4>
+<p>The file input follows files in the file system and reads log data from them.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">type</span></code></dt>
+<dd>This needs to be set to <code class="docutils literal"><span class="pre">&quot;file&quot;</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">path</span></code></dt>
+<dd><p class="first">The path to a file that should be followed.</p>
+<p>Please make sure to escape the <code class="docutils literal"><span class="pre">\</span></code> character in Windows paths: <code class="docutils literal"><span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;C:\\Program</span> <span class="pre">Files\\Apache2\\logs\\www.example.com.access.log&quot;</span></code></p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path-glob-root</span></code></dt>
+<dd><p class="first">The globbing root directory that should be monitored. See below for an explanation on globbing.</p>
+<p>Please make sure to escape the <code class="docutils literal"><span class="pre">\</span></code> character in Windows paths: <code class="docutils literal"><span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;C:\\Program</span> <span class="pre">Files\\Apache2\\logs\\www.example.com.access.log&quot;</span></code></p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">path-glob-pattern</span></code></dt>
+<dd><p class="first">The globbing patttern. See below for an explanation on globbing.</p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">content-splitter</span></code></dt>
+<dd><p class="first">The content splitter implementation that should be used to detect the end of a log message.</p>
+<p>Available content splitters: <code class="docutils literal"><span class="pre">NEWLINE</span></code>, <code class="docutils literal"><span class="pre">PATTERN</span></code></p>
+<p>See below for an explanation on content splitters.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;NEWLINE&quot;</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">content-splitter-pattern</span></code></dt>
+<dd><p class="first">The pattern that should be used for the <code class="docutils literal"><span class="pre">PATTERN</span></code> content splitter.</p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">charset</span></code></dt>
+<dd><p class="first">Charset of the content in the configured file(s).</p>
+<p>Can be one of the <a class="reference external" href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported Charsets</a> of the JVM.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;UTF-8&quot;</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">reader-interval</span></code></dt>
+<dd><p class="first">The interval in which the collector tries to read from every configured file. You might set this to a higher value like <code class="docutils literal"><span class="pre">1s</span></code> if you have files which do not change very often to avoid unnecessary work.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;100ms&quot;</span></code>)</p>
+</dd>
+</dl>
+<p><strong>Globbing / Wildcards</strong></p>
+<p>You might want to configure the collector to read from lots of different files or files which have a different name each time they are rotated. (i.e. time/date in a filename) The file input supports this via the <code class="docutils literal"><span class="pre">path-glob-root</span></code> and <code class="docutils literal"><span class="pre">path-glob-pattern</span></code> settings.</p>
+<p>A usual glob/wildcard string you know from other tools might be <code class="docutils literal"><span class="pre">/var/log/apache2/**/*.{access,error}.log</span></code>. This means you are interested in all log files which names end with <code class="docutils literal"><span class="pre">.access.log</span></code> or <code class="docutils literal"><span class="pre">.error.log</span></code> and which are in a sub directory of <code class="docutils literal"><span class="pre">/var/log/apache2</span></code>. Example: <code class="docutils literal"><span class="pre">/var/log/apache2/example.com/www.example.com.access.log</span></code></p>
+<p>For compatibility reasons you have to split this string into two parts. The root and the pattern.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre>// /var/log/apache2/**/*.{access,error}.log
+path-glob-root = &quot;/var/log/apache2&quot;
+path-glob-pattern = &quot;**/*.{access,error}.log&quot;
+
+// C:\Program Files\Apache2\logs\*.access.log
+path-glob-root = &quot;C:\\Program Files\\Apache2\\logs&quot; // Make sure to escape the \ character in Windows paths!
+path-glob-pattern = &quot;*.access.log&quot;
+</pre></div>
+</div>
+<p>The file input will monitor the <code class="docutils literal"><span class="pre">path-glob-root</span></code> for new files and checks them against the <code class="docutils literal"><span class="pre">path-glob-pattern</span></code> to decide if they should be followed or not.</p>
+<p>All available special characters for the glob pattern are documented in the <a class="reference external" href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">Java docs for the getPathMatcher() method</a>.</p>
+<p><strong>Content Splitter</strong></p>
+<p>One common problem when reading from plain text log files is to decide when a log message is complete. By default, the file input considers each line in a file to be a separate log message:</p>
+<div class="highlight-python"><div class="highlight"><pre>Jul 15 10:27:08 tumbler anacron[32426]: Job `cron.daily&#39; terminated  # &lt;-- Log message 1
+Jul 15 10:27:08 tumbler anacron[32426]: Normal exit (1 job run)      # &lt;-- Log message 2
+</pre></div>
+</div>
+<p>But there are several cases where this is not correct. Java stack traces are a good example:</p>
+<div class="highlight-python"><div class="highlight"><pre>2015-07-10T11:16:34.486+01:00 WARN  [InputBufferImpl] Unable to process event RawMessageEvent{raw=null, uuid=bde580a0-26ec-11e5-9a46-005056b26ca9, encodedLength=350}, sequence 19847516
+java.lang.NullPointerException
+        at org.graylog2.shared.buffers.JournallingMessageHandler$Converter.apply(JournallingMessageHandler.java:89)
+        at org.graylog2.shared.buffers.JournallingMessageHandler$Converter.apply(JournallingMessageHandler.java:72)
+        at com.google.common.collect.Lists$TransformingRandomAccessList$1.transform(Lists.java:617)
+        at com.google.common.collect.TransformedIterator.next(TransformedIterator.java:48)
+        at java.util.AbstractCollection.toArray(AbstractCollection.java:141)
+        at java.util.ArrayList.&lt;init&gt;(ArrayList.java:177)
+        at com.google.common.collect.Lists.newArrayList(Lists.java:144)
+        at org.graylog2.shared.buffers.JournallingMessageHandler.onEvent(JournallingMessageHandler.java:61)
+        at org.graylog2.shared.buffers.JournallingMessageHandler.onEvent(JournallingMessageHandler.java:36)
+        at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+        at com.codahale.metrics.InstrumentedExecutorService$InstrumentedRunnable.run(InstrumentedExecutorService.java:176)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+        at java.lang.Thread.run(Thread.java:745)
+2015-07-10T11:18:18.000+01:00 WARN  [InputBufferImpl] Unable to process event RawMessageEvent{raw=null, uuid=bde580a0-26ec-11e5-9a46-005056b26ca9, encodedLength=350}, sequence 19847516
+java.lang.NullPointerException
+        ...
+        ...
+</pre></div>
+</div>
+<p>This should be one message but using a newline separator here will not work because it would generate one log message for each line.</p>
+<p>To solve this problem, the file input can be configured to use a <code class="docutils literal"><span class="pre">PATTERN</span></code> content splitter. It creates separate log messages based on a regular expression instead of newline characters. A configuration for the stack trace example above could look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>inputs {
+  graylog-server-logs {
+    type = &quot;file&quot;
+    path = &quot;/var/log/graylog-server/server.log&quot;
+    content-splitter = &quot;PATTERN&quot;
+    content-splitter-pattern = &quot;^\\d{4}-\\d{2}-\\d{2}T&quot; // Make sure to escape the \ character!
+  }
+}
+</pre></div>
+</div>
+<p>This instructs the file input to split messages on a timestamp at the beginning of a line. So the first stack trace in the message above will be considered complete once a new timestamp is detected.</p>
+</div>
+<div class="section" id="windows-eventlog-input">
+<h4>Windows Eventlog Input<a class="headerlink" href="#windows-eventlog-input" title="Permalink to this headline">¶</a></h4>
+<p>The Windows eventlog input can read event logs from Windows systems.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">type</span></code></dt>
+<dd>This needs to be set to <code class="docutils literal"><span class="pre">&quot;windows-eventlog&quot;</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">source-name</span></code></dt>
+<dd><p class="first">The Windows event log system has several different sources from which events can be read.</p>
+<p>Common source names: <code class="docutils literal"><span class="pre">Application</span></code>, <code class="docutils literal"><span class="pre">System</span></code>, <code class="docutils literal"><span class="pre">Security</span></code></p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;Application&quot;</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">poll-interval</span></code></dt>
+<dd><p class="first">This controls how often the Windows event log should be polled for new events.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">&quot;1s&quot;</span></code>)</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>inputs {
+  win-eventlog-application {
+    type = &quot;windows-eventlog&quot;
+    source-name = &quot;Application&quot;
+    poll-interval = &quot;1s&quot;
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="output-settings">
+<h3>Output Settings<a class="headerlink" href="#output-settings" title="Permalink to this headline">¶</a></h3>
+<p>The output settings need to be nested in a <code class="docutils literal"><span class="pre">output</span> <span class="pre">{</span> <span class="pre">}</span></code> block. Each output has an ID and a type:</p>
+<div class="highlight-python"><div class="highlight"><pre>outputs {
+  graylog-server { // =&gt; The output ID
+    type = &quot;gelf&quot;  // =&gt; The output type
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>An output ID needs to be unique among all configured outputs. If there are two outputs with the same ID, the last one wins.</p>
+<p>The following output types are available.</p>
+<div class="section" id="gelf-output">
+<h4>GELF Output<a class="headerlink" href="#gelf-output" title="Permalink to this headline">¶</a></h4>
+<p>The GELF output sends log messages to a GELF TCP input on a Graylog server.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">type</span></code></dt>
+<dd>This needs to be set to <code class="docutils literal"><span class="pre">&quot;gelf&quot;</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">host</span></code></dt>
+<dd><p class="first">Hostname or IP address of the Graylog server.</p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">port</span></code></dt>
+<dd><p class="first">Port of the GELF TCP input on the Graylog server host.</p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-tls</span></code></dt>
+<dd>Enables TLS for the connection to the GELF TCP input. Requires a TLS-enabled GELF TCP input on the Graylog server.
+(default: false)</dd>
+<dt><code class="docutils literal"><span class="pre">client-tls-cert-chain-file</span></code></dt>
+<dd><p class="first">Path to a TLS certificate chain file. If not set, the default certificate chain of the JVM will be used.</p>
+<p class="last">(default: none)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-tls-verify-cert</span></code></dt>
+<dd><p class="first">Verify the TLS certificate of the GELF TCP input on the Graylog server.</p>
+<p>You might have to disable this if you are using a self-signed certificate for the GELF input and do not have any certificate chain file.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">true</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-queue-size</span></code></dt>
+<dd><p class="first">The <a class="reference external" href="https://github.com/Graylog2/gelfclient">GELF client library</a> that is used for this output has an internal queue of messages. This option configures the size of this queue.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">512</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-connect-timeout</span></code></dt>
+<dd><p class="first">TCP connection timeout to the GELF input on the Graylog server.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">5000</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-reconnect-delay</span></code></dt>
+<dd><p class="first">The delay before the output tries to reconnect to the GELF input on the Graylog server.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">1000</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-tcp-no-delay</span></code></dt>
+<dd><p class="first">Sets the <code class="docutils literal"><span class="pre">TCP_NODELAY</span></code> option on the TCP socket that connects to the GELF input.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">true</span></code>)</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">client-send-buffer-size</span></code></dt>
+<dd><p class="first">Sets the TCP send buffer size for the connection to the GELF input.</p>
+<p>It uses the JVM default for the operating system if set to <code class="docutils literal"><span class="pre">-1</span></code>.</p>
+<p class="last">(default: <code class="docutils literal"><span class="pre">-1</span></code>)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="stdout-output">
+<h4>STDOUT Output<a class="headerlink" href="#stdout-output" title="Permalink to this headline">¶</a></h4>
+<p>The STDOUT output prints the string representation of each message to STDOUT. This can be useful for debugging purposes but should be disabled in production.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">type</span></code></dt>
+<dd>This needs to be set to <code class="docutils literal"><span class="pre">&quot;stdout&quot;</span></code>.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="static-message-fields">
+<h3>Static Message Fields<a class="headerlink" href="#static-message-fields" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes it is useful to be able to add some static field to a message. This can help selecting extractors to run on the server, simplify stream routing and can make searching/filtering for those messages easier.</p>
+<p>Every collector input can be configured with a <code class="docutils literal"><span class="pre">message-fields</span></code> option which takes key-value pairs. The key needs to be a string, the value can be a string or a number.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>inputs {
+  apache-logs {
+    type = &quot;file&quot;
+    path = &quot;/var/log/apache2/access.log&quot;
+    message-fields = {
+      &quot;program&quot; = &quot;apache2&quot;
+      &quot;priority&quot; = 3
+    }
+  }
+}
+</pre></div>
+</div>
+<p>Each static message field will end up in the GELF message and shows up in the web interface as a separate field.</p>
+<p>An input might overwrite a message field defined in the input configuration. For example the file input always sets a <code class="docutils literal"><span class="pre">source_file</span></code> field with the path to the file where the message has been read from. If you configure a <code class="docutils literal"><span class="pre">source_file</span></code> message field, it will be overwritten by the input.</p>
+</div>
+<div class="section" id="input-output-routing">
+<h3>Input/Output Routing<a class="headerlink" href="#input-output-routing" title="Permalink to this headline">¶</a></h3>
+<p>Every message that gets read by the configured inputs will be routed to every configured output. If you have two file inputs and two GELF outputs, every message will be received by both outputs. You might want to send some logs to only one output or have one output only accept logs from a certain input, though.</p>
+<p>The collector provides two options for inputs and outputs which can be used to influence the message routing.</p>
+<p>Inputs have a <code class="docutils literal"><span class="pre">outputs</span></code> option and outputs have a <code class="docutils literal"><span class="pre">inputs</span></code> option. Both take a comma separated list of input/output IDs.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>inputs {
+  apache-logs {
+    type = &quot;file&quot;
+    path-glob-root = &quot;/var/log/apache2&quot;
+    path-glob-pattern = &quot;*.{access,error}.log&quot;
+    outputs = &quot;gelf-1,gelf-2&quot;
+  }
+  auth-log {
+    type = &quot;file&quot;
+    path = &quot;/var/log/auth.log&quot;
+  }
+  syslog {
+    type = &quot;file&quot;
+    path = &quot;/var/log/syslog&quot;
+  }
+}
+
+outputs {
+  gelf-1 {
+    type = &quot;gelf&quot;
+    host = &quot;10.0.0.1&quot;
+    port = 12201
+  }
+  gelf-2 {
+    type = &quot;gelf&quot;
+    host = &quot;10.0.0.1&quot;
+    port = 12202
+  }
+  console {
+    type = &quot;stdout&quot;
+    inputs = &quot;syslog&quot;
+  }
+}
+</pre></div>
+</div>
+<p>Routing for this config:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">apache-logs</span></code> messages will only go to <code class="docutils literal"><span class="pre">gelf-1</span></code> and <code class="docutils literal"><span class="pre">gelf-2</span></code> outputs.</li>
+<li><code class="docutils literal"><span class="pre">auth-log</span></code> messages will go to <code class="docutils literal"><span class="pre">gelf-1</span></code> and <code class="docutils literal"><span class="pre">gelf-2</span></code> outputs.</li>
+<li><code class="docutils literal"><span class="pre">syslog</span></code> messages will go to all outputs.</li>
+<li><code class="docutils literal"><span class="pre">console</span></code> output will only receive messages from <code class="docutils literal"><span class="pre">syslog</span></code> input.</li>
+</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="17%" />
+<col width="17%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">inputs | outputs</th>
+<th class="head">gelf-1</th>
+<th class="head">gelf-2</th>
+<th class="head">console</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>apache-logs</td>
+<td>✔</td>
+<td>✔</td>
+<td>✗</td>
+</tr>
+<tr class="row-odd"><td>auth-log</td>
+<td>✔</td>
+<td>✔</td>
+<td>✗</td>
+</tr>
+<tr class="row-even"><td>syslog</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+</tbody>
+</table>
+<p>This is pretty powerful but might get confusing when inputs and outputs have the routing fields. This is how it is implemented in pseudo-code:</p>
+<div class="highlight-python"><div class="highlight"><pre>var message = Object(message)
+var output = Object(gelf-output)
+
+if empty(output.inputs) AND empty(message.outputs)
+
+  // No output routing configured, write the message to the output.
+  output.write(message)
+
+else if output.inputs.contains(message.inputId) OR message.outputs.contains(output.id)
+
+  // Either the input that generated the message has the output ID in its &quot;outputs&quot; field
+  // or the output has the ID of the input that generated the message in its &quot;inputs&quot; field.
+  output.write(message)
+
+end
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="running-graylog-collector">
+<span id="id3"></span><h2>Running Graylog Collector<a class="headerlink" href="#running-graylog-collector" title="Permalink to this headline">¶</a></h2>
+<p>You will need a configuration file before starting the collector. See the configuration documentation above for detailed instructions on how to configure it.</p>
+<div class="section" id="id4">
+<h3>Linux/Unix<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>The start method for the collector depends on the installation method your choose.</p>
+<p><strong>Operating System Package</strong></p>
+<p>We ship startup scripts in our OS packages that use the startup method of the particular operating system.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="19%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">OS</th>
+<th class="head">Init System</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Ubuntu</td>
+<td>upstart</td>
+<td><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">start</span> <span class="pre">graylog-collector</span></code></td>
+</tr>
+<tr class="row-odd"><td>Debian</td>
+<td>systemd</td>
+<td><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">graylog-collector</span></code></td>
+</tr>
+<tr class="row-even"><td>CentOS</td>
+<td>systemd</td>
+<td><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">graylog-collector</span></code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Manual Setup</strong></p>
+<p>If you use the manual setup, the location of the start script depends on where you extracted the collector.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ bin/graylog-collector run -f config/collector.conf
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>Windows<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>You probably want to run the collector as Windows service as described in the Windows installation section above.
+If you want to run it from the command line, run the following commands.</p>
+<p>Make sure you have a valid configuration file in <code class="docutils literal"><span class="pre">config\collector.conf</span></code>.</p>
+<p>Commands:</p>
+<div class="highlight-python"><div class="highlight"><pre>C:\&gt; cd graylog-collector-0.2.2
+C:\graylog-collector-0.2.2&gt; bin\graylog-collector.bat run -f config\collector.conf
+</pre></div>
+</div>
+<img alt="../_images/collector_win_run_1.png" src="../_images/collector_win_run_1.png" />
+</div>
+<div class="section" id="collector-status">
+<h3>Collector Status<a class="headerlink" href="#collector-status" title="Permalink to this headline">¶</a></h3>
+<p>Once the collector has been deployed successfully, you can check on the status from the Graylog UI.</p>
+<img alt="../_images/collector_status.png" src="../_images/collector_status.png" />
+<p>You can reach the collector status overview page this way:</p>
+<ol class="arabic simple">
+<li>Log into Graylog Web Interface</li>
+<li>Navigate to System / Collectors</li>
+<li>Click Collectors</li>
+</ol>
+</div>
+<div class="section" id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h3>
+<p>Check the standard output of the collector process for any error messages or warnings. Messages not arriving in your Graylog
+cluster? Check possible firewalls and the network connection.</p>
+</div>
+</div>
+<div class="section" id="command-line-options">
+<h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>Linux/Unix<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>The collector offers the following command line options:</p>
+<div class="highlight-python"><div class="highlight"><pre>usage: graylog-collector &lt;command&gt; [&lt;args&gt;]
+
+The most commonly used graylog-collector commands are:
+
+    help      Display help information
+
+    run       Start the collector
+
+    version   Show version information on STDOUT
+
+ See &#39;graylog-collector help &lt;command&gt;&#39; for more information on a specific command.
+
+ NAME
+        graylog-collector run - Start the collector
+
+ SYNOPSIS
+        graylog-collector run -f &lt;configFile&gt;
+
+ OPTIONS
+        -f &lt;configFile&gt;
+            Path to configuration file.
+</pre></div>
+</div>
+</div>
+<div class="section" id="correctly-configured-collector-log-sample">
+<h3>Correctly Configured Collector Log Sample<a class="headerlink" href="#correctly-configured-collector-log-sample" title="Permalink to this headline">¶</a></h3>
+<p>This is the <cite>STDOUT</cite> output of a healthy collector starting:</p>
+<div class="highlight-python"><div class="highlight"><pre>2015-05-12T16:00:10.841+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Starting Collector v0.2.0-SNAPSHOT (commit a2ad8c8)
+2015-05-12T16:00:11.489+0200 INFO  [main] o.g.collector.utils.CollectorId - Collector ID: cf4734f7-01d6-4974-a957-cb71bbd826b7
+2015-05-12T16:00:11.505+0200 INFO  [GelfOutput] o.g.c.outputs.gelf.GelfOutput - Starting GELF transport: org.graylog2.gelfclient.GelfConfiguration@3952e37e
+2015-05-12T16:00:11.512+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Service RUNNING: BufferProcessor [RUNNING]
+2015-05-12T16:00:11.513+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Service RUNNING: MetricService [RUNNING]
+2015-05-12T16:00:11.515+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Service RUNNING: FileInput{id=&#39;local-syslog&#39;, path=&#39;/var/log/syslog&#39;, charset=&#39;UTF-8&#39;, outputs=&#39;&#39;, content-splitter=&#39;NEWLINE&#39;}
+2015-05-12T16:00:11.516+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Service RUNNING: GelfOutput{port=&#39;12201&#39;, id=&#39;gelf-tcp&#39;, client-send-buffer-size=&#39;32768&#39;, host=&#39;127.0.0.1&#39;, inputs=&#39;&#39;, client-reconnect-delay=&#39;1000&#39;, client-connect-timeout=&#39;5000&#39;, client-tcp-no-delay=&#39;true&#39;, client-queue-size=&#39;512&#39;}
+2015-05-12T16:00:11.516+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Service RUNNING: HeartbeatService [RUNNING]
+2015-05-12T16:00:11.516+0200 INFO  [main] o.graylog.collector.cli.commands.Run - Service RUNNING: StdoutOutput{id=&#39;console&#39;, inputs=&#39;&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Troubleshooting<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="unable-to-send-heartbeat">
+<h3>Unable to send heartbeat<a class="headerlink" href="#unable-to-send-heartbeat" title="Permalink to this headline">¶</a></h3>
+<p>The collector registers with your Graylog server on a regular basis to make sure it shows up on the Collectors page in the Graylog web interface.
+This registration can fail if the collector cannot connect to the server via HTTP on port <code class="docutils literal"><span class="pre">12900</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>2015-06-06T10:45:14.964+0200 WARN  [HeartbeatService RUNNING] collector.heartbeat.HeartbeatService - Unable to send heartbeat to Graylog server: ConnectException: Connection refused
+</pre></div>
+</div>
+<p><strong>Possible solutions</strong></p>
+<ul class="simple">
+<li>Make sure the server REST API is configured to listen on a reachable IP address.
+Change the &#8220;rest_listen_uri&#8221; setting in the Graylog server config to this: <code class="docutils literal"><span class="pre">rest_listen_uri</span> <span class="pre">=</span> <span class="pre">http://0.0.0.0:12900/</span></code></li>
+<li>Correctly configure any firewalls between the collector and the server to allow HTTP traffic to port <code class="docutils literal"><span class="pre">12900</span></code>.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="queries.html" class="btn btn-neutral float-right" title="Searching" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sending_data.html" class="btn btn-neutral" title="Sending in log data" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

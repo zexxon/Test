@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Docker &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Installing Graylog" href="../installation.html"/>
+        <link rel="next" title="Vagrant" href="vagrant.html"/>
+        <link rel="prev" title="Chef, Puppet, Ansible, Vagrant" href="config_management_tools.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../installation.html">Installing Graylog</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="virtual_machine_appliances.html">Virtual Machine Appliances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graylog_ctl.html">The graylog-ctl script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operating_system_packages.html">Operating System Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_management_tools.html">Chef, Puppet, Ansible, Vagrant</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-beta-container">Using the beta container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-get-log-data-in">How to get log data in</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-options">Additional options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#persist-data">Persist data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-container-setup">Multi container setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssl-support">SSL Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problems">Problems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build">Build</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openstack.html">OpenStack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aws.html">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">Microsoft Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual_setup.html">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../installation.html">Installing Graylog</a> &raquo;</li>
+      
+    <li>Docker</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/pages/installation/docker.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>You need a recent <cite>docker</cite> version installed, take a look <a class="reference external" href="https://docs.docker.com/installation/">here</a> for instructions.</p>
+<p>This will create a container with all Graylog services running:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker pull graylog2/allinone
+$ docker run -t -p 9000:9000 -p 12201:12201 -p 12201:12201/udp graylog2/allinone
+</pre></div>
+</div>
+<p>To run the container in the background replace <cite>-t</cite> with <cite>-d</cite>.</p>
+</div>
+<div class="section" id="using-the-beta-container">
+<h2>Using the beta container<a class="headerlink" href="#using-the-beta-container" title="Permalink to this headline">¶</a></h2>
+<p>You can also run a pre-release or beta version of Graylog using Docker. Just replace <cite>graylog2/allinone</cite> with <cite>graylog2/allinone-beta</cite>.
+Note that you will have to replace this not only in the <cite>docker run</cite> command above but also in subsequent commands of this documentation.
+We only recommend to run beta versions if you are an experienced Graylog user and know what you are doing.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>After starting the container, your Graylog instance is ready to use.
+You can reach the web interface by pointing your browser to the IP address of your Docker host: <cite>http://&lt;host IP&gt;:9000</cite></p>
+<p>The default login is Username: <cite>admin</cite>, Password: <cite>admin</cite>.</p>
+</div>
+<div class="section" id="how-to-get-log-data-in">
+<h2>How to get log data in<a class="headerlink" href="#how-to-get-log-data-in" title="Permalink to this headline">¶</a></h2>
+<p>You can create different kinds of inputs under <em>System -&gt; Inputs</em>, however you can only use ports that have been properly
+mapped to your docker container, otherwise data will not get through. You already exposed the default GELF port 12201, so
+it is a good idea to start a GELF TCP input there.</p>
+<p>To start another input you have to expose the right port e.g. to start a raw TCP input on
+port 5555; stop your container and recreate it, whilst appending <cite>-p 5555:5555</cite> to your run argument. Similarly, the
+same can be done for UDP by appending <cite>-p 5555:5555/udp</cite> option. Then you can send raw text to Graylog like
+<cite>echo &#8216;first log message&#8217; | nc localhost 5555</cite></p>
+</div>
+<div class="section" id="additional-options">
+<h2>Additional options<a class="headerlink" href="#additional-options" title="Permalink to this headline">¶</a></h2>
+<p>You can configure the most important aspects of your Graylog instance through environment variables. In order
+to set a variable add a <cite>-e VARIABLE_NAME</cite> option to your <cite>docker run</cite> command. For example to set another admin password
+start your container like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run -t -p 9000:9000 -p 12201:12201 -p 12201:12201/udp -e GRAYLOG_PASSWORD=SeCuRePwD graylog2/allinone
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Variable Name</th>
+<th class="head">Configuration Option</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>GRAYLOG_PASSWORD</td>
+<td>Set admin password</td>
+</tr>
+<tr class="row-odd"><td>GRAYLOG_USERNAME</td>
+<td>Set username for admin user (default: admin)</td>
+</tr>
+<tr class="row-even"><td>GRAYLOG_TIMEZONE</td>
+<td>Set <a class="reference external" href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">timezone (TZ)</a> you are in</td>
+</tr>
+<tr class="row-odd"><td>GRAYLOG_SMTP_SERVER</td>
+<td>Hostname/IP address of your SMTP server for sending alert mails</td>
+</tr>
+<tr class="row-even"><td>GRAYLOG_RETENTION</td>
+<td>Configure how long or how many logs should be stored</td>
+</tr>
+<tr class="row-odd"><td>GRAYLOG_NODE_ID</td>
+<td>Set server node ID (default: random)</td>
+</tr>
+<tr class="row-even"><td>GRAYLOG_SERVER_SECRET</td>
+<td>Set salt for encryption</td>
+</tr>
+<tr class="row-odd"><td>GRAYLOG_MASTER</td>
+<td>IP address of a remote master container (see multi container setup)</td>
+</tr>
+<tr class="row-even"><td>GRAYLOG_SERVER</td>
+<td>Run only server components</td>
+</tr>
+<tr class="row-odd"><td>GRAYLOG_WEB</td>
+<td>Run web interface only</td>
+</tr>
+<tr class="row-even"><td>ES_MEMORY</td>
+<td>Set memory used by Elasticsearch (syntax: 1024m). Defaults to 60% of host memory</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Set an admin password:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_PASSWORD</span><span class="o">=</span><span class="n">SeCuRePwD</span>
+</pre></div>
+</div>
+<p>Change admin username:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_USERNAME</span><span class="o">=</span><span class="n">root</span>
+</pre></div>
+</div>
+<p>Set your local timezone:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_TIMEZONE</span><span class="o">=</span><span class="n">Europe</span><span class="o">/</span><span class="n">Berlin</span>
+</pre></div>
+</div>
+<p>Set a SMTP server for alert e-mails:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_SMTP_SERVER</span><span class="o">=</span><span class="s">&quot;mailserver.com&quot;</span>
+</pre></div>
+</div>
+<p>Disable TLS/SSL for mail delivery:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_SMTP_SERVER</span><span class="o">=</span><span class="s">&quot;mailserver.com --no-tls --no-ssl&quot;</span>
+</pre></div>
+</div>
+<p>Set SMTP server with port, authentication, backlink URL and changed sender address:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_SMTP_SERVER</span><span class="o">=</span><span class="s">&quot;example.com --port=465 --user=username@mailserver.com --password=SecretPassword --from-email=graylog@example.com --web-url=http://my.graylog.host&quot;</span>
+</pre></div>
+</div>
+<p>Set a static server node ID:</p>
+<div class="highlight-python"><div class="highlight"><pre>GRAYLOG_NODE_ID=de305d54-75b4-431b-adb2-eb6b9e546014
+</pre></div>
+</div>
+<p>Set a configuration master for linking multiple containers:</p>
+<div class="highlight-python"><div class="highlight"><pre>GRAYLOG_MASTER=192.168.3.15
+</pre></div>
+</div>
+<p>Only start server services:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_SERVER</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<p>Only run web interface:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_WEB</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<p>Keep 30Gb of logs, distributed across 10 Elasticsearch indices:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_RETENTION</span><span class="o">=</span><span class="s">&quot;--size=3 --indices=10&quot;</span>
+</pre></div>
+</div>
+<p>Keep one month of logs, distributed across 30 indices with 24 hours of logs each:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GRAYLOG_RETENTION</span><span class="o">=</span><span class="s">&quot;--time=24 --indices=30&quot;</span>
+</pre></div>
+</div>
+<p>Limit amount of memory Elasticsearch is using:</p>
+<div class="highlight-python"><div class="highlight"><pre>ES_MEMORY=2g
+</pre></div>
+</div>
+</div>
+<div class="section" id="persist-data">
+<h2>Persist data<a class="headerlink" href="#persist-data" title="Permalink to this headline">¶</a></h2>
+<p>In order to persist log data and configuration settings mount the Graylog data directory outside the container:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run -t -p 9000:9000 -p 12201:12201 -p 12201:12201/udp -e GRAYLOG_NODE_ID=some-rand-omeu-uidasnodeid -e GRAYLOG_SERVER_SECRET=somesecretsaltstring -v /graylog/data:/var/opt/graylog/data -v /graylog/logs:/var/log/graylog graylog2/allinone
+</pre></div>
+</div>
+<p>Please make sure that you always use the same node-ID and server secret. Otherwise your users can&#8217;t login or inputs will not be started after creating a new container on old data.</p>
+<p>Other volumes to persist:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Path</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/var/opt/graylog/data</td>
+<td>Elasticsearch for raw log data and MongoDB as configuration store</td>
+</tr>
+<tr class="row-odd"><td>/var/log/graylog</td>
+<td>Internal logs for all running services</td>
+</tr>
+<tr class="row-even"><td>/opt/graylog/plugin</td>
+<td>Graylog server plugins</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="multi-container-setup">
+<h2>Multi container setup<a class="headerlink" href="#multi-container-setup" title="Permalink to this headline">¶</a></h2>
+<p>The Omnibus package used for creating the container is able to split Graylog into several components.
+This works in a Docker environment as long as your containers run on the same hardware respectively the containers
+need to have direct network access between each other.
+The first started container is the so called <cite>master</cite>, other containers can grab configuration options from here.</p>
+<p>To setup two containers, one for the web interface and one for the server component do the following:</p>
+<p>Start the <cite>master</cite> with Graylog server parts:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run -t -p 12900:12900 -p 12201:12201 -p 12201:12201/udp -p 4001:4001 -e GRAYLOG_SERVER=true graylog2/allinone
+</pre></div>
+</div>
+<p>The configuration port 4001 is now accessible through the host IP address.</p>
+<p>Start the web interface in a second container and give the host address as <cite>master</cite> to fetch configuration options:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run -t -p 9000:9000 -e GRAYLOG_MASTER=&lt;host IP address&gt; -e GRAYLOG_WEB=true graylog2/allinone
+</pre></div>
+</div>
+</div>
+<div class="section" id="ssl-support">
+<h2>SSL Support<a class="headerlink" href="#ssl-support" title="Permalink to this headline">¶</a></h2>
+<p>Graylog comes with a pre-configured SSL configuration. On start-up time a self-signed certificate is generated and used on port
+443 to provide the web interface via HTTPS. Simply expose the port like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run -t -p 443:443 graylog2/allinone
+</pre></div>
+</div>
+<p>It is also possible to swap the certificate with your own files. To achieve this mount the CA directory to the Docker host:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run -t -p 443:443 -v /somepath/ca:/opt/graylog/conf/nginx/ca graylog2/allinone
+</pre></div>
+</div>
+<p>If you put a file called <cite>/somepath/ca/graylog.crt</cite> respectively <cite>/somepath/ca/graylog.key</cite> in place before starting the container, Graylog
+will pick up those files and make use of your own certificate.</p>
+</div>
+<div class="section" id="problems">
+<h2>Problems<a class="headerlink" href="#problems" title="Permalink to this headline">¶</a></h2>
+<p>In case you see warnings regarding open file limit, try to set ulimit from the outside of the container:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker run --ulimit nofile=64000:64000 ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="build">
+<h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
+<p>To build the image from scratch run:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ docker build -t graylog .
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="vagrant.html" class="btn btn-neutral float-right" title="Vagrant" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="config_management_tools.html" class="btn btn-neutral" title="Chef, Puppet, Ansible, Vagrant" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

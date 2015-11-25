@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>External authentication &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Users and Roles" href="../users_and_roles.html"/>
+        <link rel="next" title="Plugins" href="../plugins.html"/>
+        <link rel="prev" title="System users" href="system_users.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../users_and_roles.html">Users and Roles</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="users.html">Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roles.html">Roles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_users.html">System users</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">External authentication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ldap-active-directory">LDAP / Active Directory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#user-mapping">User mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#group-mapping">Group mapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../users_and_roles.html">Users and Roles</a> &raquo;</li>
+      
+    <li>External authentication</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/pages/users_and_roles/external_auth.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="external-authentication">
+<h1>External authentication<a class="headerlink" href="#external-authentication" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ldap-active-directory">
+<h2>LDAP / Active Directory<a class="headerlink" href="#ldap-active-directory" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to use an external LDAP or Active Directory server to perform user authentication in Graylog. Since version 1.2,
+you can also use LDAP groups to perform authorization by mapping them to Graylog roles.</p>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>To set up your LDAP or Active Directory server, go to <em>System</em> -&gt; <em>Users</em> -&gt; <em>Configure LDAP</em>. Once LDAP is enabled, you need to
+provide some details about the server. Please test the server connection before continuing to the next steps.</p>
+</div>
+<div class="section" id="user-mapping">
+<h3>User mapping<a class="headerlink" href="#user-mapping" title="Permalink to this headline">¶</a></h3>
+<p>In order to be able to look for users in the LDAP server you configured, Graylog needs to know some more details about it:
+the base tree to limit user search queries, the pattern used to look for users, and the field containing the full name of the
+user. You can test the configuration any time by using the login test form that you can find at the bottom of that page.</p>
+<img alt="../../_images/login_test.png" src="../../_images/login_test.png" />
+<p>The login test information will indicate if Graylog was able to load the given user (and perform authentication, if a password was
+provided), and it will display all LDAP attributes belonging to the user, as you can see in the screenshot.</p>
+<p>That&#8217;s it for the basic LDAP configuration. Don&#8217;t forget to save your settings at this point!</p>
+</div>
+<div class="section" id="group-mapping">
+<h3>Group mapping<a class="headerlink" href="#group-mapping" title="Permalink to this headline">¶</a></h3>
+<p>You can additionally control the default permissions for users logging in with LDAP or Active Directory by mapping LDAP groups
+into Graylog roles. That is extremely helpful if you already use LDAP groups to authorize users in your organization, as you can
+control the default permissions members of LDAP groups will have.</p>
+<p>Once you configure group mapping, Graylog will rely on your LDAP groups to assign roles into users. That means that each time an
+LDAP user logs into Graylog, their roles will be assigned based on the LDAP groups their belong to.</p>
+<p>In first place, you need to fill in the details in the <em>Group Mapping</em> section under <em>System</em> -&gt; <em>Users</em> -&gt; <em>Configure LDAP</em>, by
+giving the base where to limit group searches, a pattern used to look for groups, and the group name attribute.</p>
+<p>Then you need to select which default user role will be assigned to any users authenticated with the LDAP server should have. It
+is also possible to assign additional roles to any users logging in with LDAP. Please refer to <a class="reference internal" href="roles.html#roles"><span>Roles</span></a> for more details
+about user roles.</p>
+<p><strong>Note:</strong> Graylog only synchronizes with LDAP when users log in. After changing the default and additional roles for LDAP users,
+you may need to modify existing users manually or delete them in order to force them to log in again.</p>
+<p>You can test the group mapping information by using the login test form, as it will display LDAP groups that the test user belongs to.
+Save the LDAP settings once you are satisfied with the results.</p>
+<img alt="../../_images/ldap_group_mapping.png" src="../../_images/ldap_group_mapping.png" />
+<p>Finally, in order to map LDAP groups into roles, you need to go to <em>System</em> -&gt; <em>Users</em> -&gt; <em>LDAP group mapping</em>. That page will
+load all available LDAP groups using the configuration you previously provided, and will allow you to select a Graylog role
+that defines the permissions that group will have inside Graylog.</p>
+<p><strong>Note:</strong> Loading LDAP groups may take some time in certain configurations, specially if you have many groups. In those cases,
+creating a better filter for groups may help with the loading times.</p>
+<p><strong>Note:</strong> Remember that Graylog only synchronizes with LDAP when users log in, so you may need to modify existing users manually
+after changing the LDAP group mapping.</p>
+</div>
+<div class="section" id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h3>
+<p>LDAP referrals for groups can be a problem during group mapping, in these cases please manage the user groups manually.
+In order to do this, the LDAP group settings must not be set.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../plugins.html" class="btn btn-neutral float-right" title="Plugins" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="system_users.html" class="btn btn-neutral" title="System users" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

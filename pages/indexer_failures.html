@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Indexer failures and dead letters &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Users and Roles" href="users_and_roles.html"/>
+        <link rel="prev" title="The Graylog index model explained" href="index_model.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Indexer failures and dead letters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#indexer-failures">Indexer failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dead-letters">Dead letters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-indexer-failure-reasons">Common indexer failure reasons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mapperparsingexception">MapperParsingException</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Indexer failures and dead letters</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/indexer_failures.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="indexer-failures-and-dead-letters">
+<h1>Indexer failures and dead letters<a class="headerlink" href="#indexer-failures-and-dead-letters" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="indexer-failures">
+<h2>Indexer failures<a class="headerlink" href="#indexer-failures" title="Permalink to this headline">¶</a></h2>
+<p>Every <code class="docutils literal"><span class="pre">graylog-server</span></code> instance is constantly keeping track about every indexing
+operation it performs. This is important for making sure that you are not silently
+losing any messages. The web interface can show you a number of write operations
+that failed and also a list of failed operations. Like any other information in the
+web interface this is also available via the REST APIs so you can hook it into your
+own monitoring systems.</p>
+<img alt="../_images/indexerfailures_1.png" src="../_images/indexerfailures_1.png" />
+<p>Information about the indexing failure is stored in a capped MongoDB collection that
+is limited in size. A lot (many tens of thousands) of failure messages should fit in there but
+it should not be considered a complete collection of all errors ever thrown.</p>
+</div>
+<div class="section" id="dead-letters">
+<h2>Dead letters<a class="headerlink" href="#dead-letters" title="Permalink to this headline">¶</a></h2>
+<p><strong>This is an experimental feature</strong>. You can enable the dead letters feature in
+your <code class="docutils literal"><span class="pre">graylog-server.conf</span></code> like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dead_letters_enabled</span> <span class="o">=</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>Graylog will write every message that could not be written to Elasticsearch into
+the MongoDB <code class="docutils literal"><span class="pre">dead_letters</span></code> collection. The messages will be waiting there for you
+to be processed in some other way. You could write a script that reads every message
+from there and transforms it in a way that will allow Graylog to accept it.</p>
+<p>A dead letter in MongoDB has exactly the structure (in the <code class="docutils literal"><span class="pre">message</span></code> field) like the
+message that would have been written to the indices:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mongo
+MongoDB shell version: 2.4.1
+connecting to: test
+&gt; use graylog2
+switched to db graylog2
+&gt; db.dead_letters.find().limit(1).pretty()
+{
+    &quot;_id&quot; : ObjectId(&quot;530a951b3004ada55961ee22&quot;),
+    &quot;message&quot; : {
+        &quot;timestamp&quot; : &quot;2014-02-24 00:40:59.121&quot;,
+        &quot;message&quot; : &quot;failing&quot;,
+        &quot;failure&quot; : &quot;haha&quot;,
+        &quot;level&quot; : NumberLong(6),
+        &quot;_id&quot; : &quot;544575a0-9cec-11e3-b502-4c8d79f2b596&quot;,
+        &quot;facility&quot; : &quot;gelf-rb&quot;,
+        &quot;source&quot; : &quot;sundaysister&quot;,
+        &quot;gl2_source_input&quot; : &quot;52ef64d03004faafd4bb0fc2&quot;,
+        &quot;gl2_source_node&quot; : &quot;fb66b27e-993c-4595-940f-dd521dcdaa93&quot;,
+        &quot;file&quot; : &quot;(irb)&quot;,
+        &quot;line&quot; : NumberLong(37),
+        &quot;streams&quot; : [ ],
+        &quot;version&quot; : &quot;1.0&quot;
+    },
+    &quot;timestamp&quot; : ISODate(&quot;2014-02-24T00:40:59.137Z&quot;),
+    &quot;letter_id&quot; : &quot;54466000-9cec-11e3-b502-4c8d79f2b596&quot;
+}
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">timestamp</span></code> is the moment in time when the message could not be written to the
+indices and the <code class="docutils literal"><span class="pre">letter_id</span></code> references to the failed indexing attempt and its error message.</p>
+<p>Every failed indexing attempt comes with a field called <code class="docutils literal"><span class="pre">written</span></code> that indicates if a
+dead letter was created or not:</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt; db.index_failures.find().limit(1).pretty()
+{
+  &quot;_id&quot; : ObjectId(&quot;530a951b3004ada55961ee23&quot;),
+  &quot;timestamp&quot; : ISODate(&quot;2014-02-24T00:40:59.136Z&quot;),
+  &quot;message&quot; : &quot;MapperParsingException[failed to parse [failure]]; nested: NumberFormatException[For input string: \&quot;haha\&quot;]; &quot;,
+  &quot;index&quot; : &quot;graylog2_324&quot;,
+  &quot;written&quot; : true,
+  &quot;letter_id&quot; : &quot;54466000-9cec-11e3-b502-4c8d79f2b596&quot;,
+  &quot;type&quot; : &quot;message&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="common-indexer-failure-reasons">
+<h2>Common indexer failure reasons<a class="headerlink" href="#common-indexer-failure-reasons" title="Permalink to this headline">¶</a></h2>
+<p>There are some common failures that can occur under certain circumstances. Those are
+explained here:</p>
+<div class="section" id="mapperparsingexception">
+<h3>MapperParsingException<a class="headerlink" href="#mapperparsingexception" title="Permalink to this headline">¶</a></h3>
+<p>An error message would look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>MapperParsingException[failed to parse [failure]]; nested: NumberFormatException[For input string: &quot;some string value&quot;];
+</pre></div>
+</div>
+<p>You tried to write a <code class="docutils literal"><span class="pre">string</span></code> into a numeric field of the index. The indexer tried
+to convert it to a number, but failed because the <code class="docutils literal"><span class="pre">string</span></code> did contain characters
+that could not be converted.</p>
+<p>This can be triggered by for example sending GELF messages with different field
+types or extractors trying to write <code class="docutils literal"><span class="pre">strings</span></code> without converting them to numeric
+values first. <strong>The recommended solution is to actively decide on field types</strong>. If
+you sent in a field like <code class="docutils literal"><span class="pre">http_response_code</span></code> with a numeric value then you should
+never change that type in the future.</p>
+<p>The same can happen with all other field types like for example booleans.</p>
+<p><strong>Note that index cycling is something to keep in mind here.</strong> The first type
+written to a field per index wins. If the Graylog index cycles then the field
+types are starting from scratch for that index. If the first message written to
+that index has the <code class="docutils literal"><span class="pre">http_response_code</span></code> set as <code class="docutils literal"><span class="pre">string</span></code> then it will be a <code class="docutils literal"><span class="pre">string</span></code>
+until the index cycles the next time. Take a look
+at <a class="reference internal" href="index_model.html"><em>The Graylog index model explained</em></a> for more information.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="users_and_roles.html" class="btn btn-neutral float-right" title="Users and Roles" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index_model.html" class="btn btn-neutral" title="The Graylog index model explained" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

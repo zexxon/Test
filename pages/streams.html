@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Streams &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Dashboards" href="dashboards.html"/>
+        <link rel="prev" title="Searching" href="queries.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Streams</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-are-streams">What are streams?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-the-difference-to-saved-searches">What&#8217;s the difference to saved searches?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-create-a-stream">How do I create a stream?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#alerts">Alerts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#alert-condition-types-explained">Alert condition types explained</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#message-count-condition">Message count condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#field-value-condition">Field value condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#field-string-value-condition">Field string value condition</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-the-difference-between-alert-callbacks-and-alert-receivers">What is the difference between alert callbacks and alert receivers?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alert-callbacks-types-explained">Alert callbacks types explained</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#email-alert-callback">Email alert callback</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-alert-callback">HTTP alert callback</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#alert-callback-history">Alert callback history</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-cases">Use cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-are-streams-processed-internally">How are streams processed internally?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stream-processing-runtime-limits">Stream Processing Runtime Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-configure-the-timeout-values-if-the-defaults-do-not-match">How to configure the timeout values if the defaults do not match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-could-cause-it">What could cause it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summary-how-do-i-solve-it">Summary: How do I solve it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#programmatic-access-via-the-rest-api">Programmatic access via the REST API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#checking-for-currently-active-alert-triggered-conditions">Checking for currently active alert/triggered conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#list-of-already-triggered-stream-alerts">List of already triggered stream alerts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#faqs">FAQs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-regular-expressions-for-stream-matching">Using regular expressions for stream matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-i-add-messages-to-a-stream-after-they-were-processed-and-stored">Can I add messages to a stream after they were processed and stored?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-i-write-own-outputs-or-alert-callbacks-methods">Can I write own outputs or alert callbacks methods?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Streams</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/streams.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="streams">
+<h1>Streams<a class="headerlink" href="#streams" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-are-streams">
+<h2>What are streams?<a class="headerlink" href="#what-are-streams" title="Permalink to this headline">¶</a></h2>
+<p>The Graylog streams are a mechanism to route messages into categories in realtime while they are processed. You define rules that
+instruct Graylog which message to route into which streams. Imagine sending these three messages to Graylog:</p>
+<div class="highlight-python"><div class="highlight"><pre>message: INSERT failed (out of disk space)
+level: 3 (error)
+source: database-host-1
+
+message: Added user &#39;foo&#39;.
+level: 6 (informational)
+source: database-host-2
+
+message: smtp ERR: remote closed the connection
+level: 3 (error)
+source: application-x
+</pre></div>
+</div>
+<p>One of the many things that you could do with streams is creating a stream called <em>Database errors</em> that is catching every error
+message from one of your database hosts.</p>
+<p>Create a new stream with these rules, selecting the option to match all rules:</p>
+<ul class="simple">
+<li>Field <code class="docutils literal"><span class="pre">level</span></code> must be greater than <code class="docutils literal"><span class="pre">4</span></code></li>
+<li>Field <code class="docutils literal"><span class="pre">source</span></code> must match regular expression <code class="docutils literal"><span class="pre">^database-host-\d+</span></code></li>
+</ul>
+<p>This will route every new message with a <code class="docutils literal"><span class="pre">level</span></code> higher than <em>WARN</em> and a <code class="docutils literal"><span class="pre">source</span></code> that matches the database host regular
+expression into the stream.</p>
+<p>A message will be routed into every stream that has all (or any) of its rules matching. This means that a message can be part of many streams
+and not just one.</p>
+<p>The stream is now appearing in the streams list and a click on its title will show you all database errors.</p>
+<p>Streams can be used to be alerted in case certain condition happens. We cover more topics related to alerts in <a class="reference internal" href="#alerts"><span>Alerts</span></a>.</p>
+<div class="section" id="what-s-the-difference-to-saved-searches">
+<h3>What&#8217;s the difference to saved searches?<a class="headerlink" href="#what-s-the-difference-to-saved-searches" title="Permalink to this headline">¶</a></h3>
+<p>The biggest difference is that streams are processed in realtime. This allows realtime alerting and forwarding to other systems.
+Imagine forwarding your database errors to another system or writing them to a file by regularly reading them from the message
+storage. Realtime streams do this much better.</p>
+<p>Another difference is that searches for complex stream rule sets are always comparably cheap to perform because a message is
+<em>tagged</em> with stream IDs when processed. A search for Graylog internally always looks like this, no matter how many stream
+rules you have configured:</p>
+<div class="highlight-python"><div class="highlight"><pre>streams:[STREAM_ID]
+</pre></div>
+</div>
+<p>Building a query with all rules would cause significantly higher load on the message storage.</p>
+</div>
+<div class="section" id="how-do-i-create-a-stream">
+<h3>How do I create a stream?<a class="headerlink" href="#how-do-i-create-a-stream" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Navigate to the streams section from the top navigation bar.</li>
+<li>Click &#8220;Create stream&#8221;.</li>
+<li>Save the stream after entering a name and a description. For example <em>All error messages</em> and
+<em>Catching all error messages from all sources</em>. The stream is now saved but <strong>not yet activated</strong>.</li>
+<li>Click on &#8220;Edit rules&#8221; for the stream you just created. That will open a page where you can manage and test stream rules.</li>
+<li>Indicate whether any or all of the rules must be true to include a message in the stream.</li>
+<li>Add stream rules, by indicating the field that you want to check, and the condition that should satisfy. Try the rules against
+some messages by loading them from an input or manually giving a message ID. Once you are satisfied with the results, click on &#8220;I&#8217;m done&#8221;.</li>
+<li>The stream is still paused, click on the &#8220;Start stream&#8221; button to activate the stream.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="alerts">
+<span id="id1"></span><h2>Alerts<a class="headerlink" href="#alerts" title="Permalink to this headline">¶</a></h2>
+<p>You can define conditions that trigger alerts. For example whenever the stream <em>All production exceptions</em> has more than 50
+messages per minute or when the field <em>milliseconds</em> had a too high standard deviation in the last five minutes.</p>
+<p>Hit <em>Manage alerts</em> in the stream <em>Action</em> dropdown to see already configured alerts, alerts that were fired in the past or
+to configure new alert conditions.</p>
+<p>You can configure the interval for alert checks in your <cite>graylog.conf</cite> using the <cite>alert_check_interval</cite> variable. The default
+is to check for alerts every 60 seconds.</p>
+<p>Graylog ships with default <em>alert callbacks</em> and can be extended with <a class="reference internal" href="plugins.html"><em>Plugins</em></a>.</p>
+<div class="section" id="alert-condition-types-explained">
+<h3>Alert condition types explained<a class="headerlink" href="#alert-condition-types-explained" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="message-count-condition">
+<h4>Message count condition<a class="headerlink" href="#message-count-condition" title="Permalink to this headline">¶</a></h4>
+<p>This condition triggers whenever the stream received more than X messages in the last Y minutes. Perfect for example to
+be alerted when there are many exceptions on your platform. Create a stream that catches every error message and be alerted
+when that stream exceeds normal throughput levels.</p>
+</div>
+<div class="section" id="field-value-condition">
+<h4>Field value condition<a class="headerlink" href="#field-value-condition" title="Permalink to this headline">¶</a></h4>
+<p>Triggers whenever the result of a statistical computation of a numerical message field in the stream is higher or lower than
+a given threshold. Perfect to monitor for performance problems: Be alerted whenever the standard deviation of the response time
+of your application was higher than X in the last Y minutes.</p>
+</div>
+<div class="section" id="field-string-value-condition">
+<h4>Field string value condition<a class="headerlink" href="#field-string-value-condition" title="Permalink to this headline">¶</a></h4>
+<p>This condition triggers whenever the stream received at least one message since the last alert run that has a field set to
+a given value. Get an alert when a message with the field <cite>type</cite> set to <cite>security</cite> arrives in the stream.</p>
+<p><strong>Important:</strong> We do not recommend to run this on analyzed fields like <cite>message</cite> or <cite>full_message</cite> because it is broken down
+to terms and you might get unexpected alerts. For example a check for <cite>security</cite> would also alert if a message with the field
+set to <cite>no security</cite> is received because it was broken down to <cite>no</cite> and <cite>security</cite>. This only happens on the analyzed
+<cite>message</cite> and <cite>full_message</cite> in Graylog. Please also take note that only a single alert is raised for this condition during the alerting interval, although multiple messages containing the given value may have been received since the last alert.</p>
+</div>
+</div>
+<div class="section" id="what-is-the-difference-between-alert-callbacks-and-alert-receivers">
+<h3>What is the difference between alert callbacks and alert receivers?<a class="headerlink" href="#what-is-the-difference-between-alert-callbacks-and-alert-receivers" title="Permalink to this headline">¶</a></h3>
+<p>There are two groups of entities configuring what happens when an alert is fired: Alarm callbacks and alert receivers.</p>
+<p>Alarm callbacks are a list of events that are being processed when an alert is triggered. There could be an arbitrary number of alarm callbacks configured here. If there is no alarm callback configured at all, a default email transport will be used to notify about the alert. If one or more alarm callbacks are configured (which might include the email alarm callback or not) then all of them are executed for every alert.</p>
+<p>If the email alarm callback is used because it appears once or multiple times in the alarm callback list, or the alarm callback list is empty so the email transport is used per default, then the list of alert receivers is used to determine which recipients should receive the alert nofications. Every Graylog user (which has an email address configured in their account) or email address in that list gets a copy of the alerts sent out.</p>
+</div>
+<div class="section" id="alert-callbacks-types-explained">
+<h3>Alert callbacks types explained<a class="headerlink" href="#alert-callbacks-types-explained" title="Permalink to this headline">¶</a></h3>
+<p>In this section we explain what the default alert callbacks included in Graylog do, and how to configure them.
+Alert callbacks are meant to be extensible through <a class="reference internal" href="plugins.html"><em>Plugins</em></a>, you can find more types in the
+<a class="reference external" href="http://marketplace.graylog.org">Graylog Marketplace</a> or even create your own.</p>
+<div class="section" id="email-alert-callback">
+<h4>Email alert callback<a class="headerlink" href="#email-alert-callback" title="Permalink to this headline">¶</a></h4>
+<p>The email alert callback can be used to send an email to the configured alert receivers when the conditions are triggered.</p>
+<p>Three configuration options are available for the alert callback to customize the email that will be sent.</p>
+<img alt="../_images/stream_alert_callback_email_form.png" src="../_images/stream_alert_callback_email_form.png" />
+<p>The <em>E-Mail Body</em> and <em>E-Mail Subject</em> are <a class="reference external" href="https://github.com/DJCordhose/jmte">jmte</a> templates. jmte is a minimal template engine that supports variables, loops and conditions. See the <a class="reference external" href="http://jmte.googlecode.com/svn/trunk/doc/index.html">jmte documentation</a> for a language reference.</p>
+<p>We expose the following objects to the templates.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">stream</span></code></dt>
+<dd><p class="first">The stream this alert belongs to.</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">stream.id</span></code> ID of the stream</li>
+<li><code class="docutils literal"><span class="pre">stream.title</span></code> title of the stream</li>
+<li><code class="docutils literal"><span class="pre">stream.description</span></code> stream description</li>
+</ul>
+</dd>
+<dt><code class="docutils literal"><span class="pre">stream_url</span></code></dt>
+<dd>A string that contains the HTTP URL to the stream.</dd>
+<dt><code class="docutils literal"><span class="pre">check_result</span></code></dt>
+<dd><p class="first">The check result object for this stream.</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">check_result.triggeredCondition</span></code> string representation of the triggered alert condition</li>
+<li><code class="docutils literal"><span class="pre">check_result.triggeredAt</span></code> date when this condition was triggered</li>
+<li><code class="docutils literal"><span class="pre">check_result.resultDescription</span></code> text that describes the check result</li>
+</ul>
+</dd>
+<dt><code class="docutils literal"><span class="pre">backlog</span></code></dt>
+<dd>A list of <code class="docutils literal"><span class="pre">message</span></code> objects. Can be used to iterate over the messages via <code class="docutils literal"><span class="pre">foreach</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">message</span></code> (only available via iteration over the <code class="docutils literal"><span class="pre">backlog</span></code> object)</dt>
+<dd><p class="first">The message object has several fields with details about the message. When using the <code class="docutils literal"><span class="pre">message</span></code> object without accessing any fields, the <code class="docutils literal"><span class="pre">toString()</span></code> method of the underlying Java object is used to display it.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">message.id</span></code> autogenerated message id</li>
+<li><code class="docutils literal"><span class="pre">message.message</span></code> the actual message text</li>
+<li><code class="docutils literal"><span class="pre">message.source</span></code> the source of the message</li>
+<li><code class="docutils literal"><span class="pre">message.timestamp</span></code> the message timestamp</li>
+<li><code class="docutils literal"><span class="pre">message.fields</span></code> map of key value pairs for all the fields defined in the message</li>
+</ul>
+<p class="last">The <code class="docutils literal"><span class="pre">message.fields</span></code> fields can be useful to get access to arbitrary fields that are defined in the message. For example <code class="docutils literal"><span class="pre">message.fields.full_message</span></code> would return the <code class="docutils literal"><span class="pre">full_message</span></code> of a GELF message.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="http-alert-callback">
+<h4>HTTP alert callback<a class="headerlink" href="#http-alert-callback" title="Permalink to this headline">¶</a></h4>
+<p>The HTTP alert callback lets you configure an endpoint that will be called when the alert is triggered.</p>
+<p>Graylog will send a POST request to the callback URL including information about the alert. Here is an example of the payload included in a callback:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;check_result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;result_description&quot;</span><span class="p">:</span> <span class="s">&quot;Stream had 2 messages in the last 1 minutes with trigger condition more than 1 messages. (Current grace time: 1 minutes)&quot;</span><span class="p">,</span>
+        <span class="s">&quot;triggered_condition&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;5e7a9c8d-9bb1-47b6-b8db-4a3a83a25e0c&quot;</span><span class="p">,</span>
+            <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;MESSAGE_COUNT&quot;</span><span class="p">,</span>
+            <span class="s">&quot;created_at&quot;</span><span class="p">:</span> <span class="s">&quot;2015-09-10T09:44:10.552Z&quot;</span><span class="p">,</span>
+            <span class="s">&quot;creator_user_id&quot;</span><span class="p">:</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+            <span class="s">&quot;grace&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;grace&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s">&quot;threshold&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s">&quot;threshold_type&quot;</span><span class="p">:</span> <span class="s">&quot;more&quot;</span><span class="p">,</span>
+                <span class="s">&quot;backlog&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="mi">1</span>
+            <span class="p">},</span>
+            <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;time: 1, threshold_type: more, threshold: 1, grace: 1&quot;</span><span class="p">,</span>
+            <span class="s">&quot;type_string&quot;</span><span class="p">:</span> <span class="s">&quot;MESSAGE_COUNT&quot;</span><span class="p">,</span>
+            <span class="s">&quot;backlog&quot;</span><span class="p">:</span> <span class="mi">5</span>
+        <span class="p">},</span>
+        <span class="s">&quot;triggered_at&quot;</span><span class="p">:</span> <span class="s">&quot;2015-09-10T09:45:54.749Z&quot;</span><span class="p">,</span>
+        <span class="s">&quot;triggered&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s">&quot;matching_messages&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;index&quot;</span><span class="p">:</span> <span class="s">&quot;graylog2_7&quot;</span><span class="p">,</span>
+                <span class="s">&quot;message&quot;</span><span class="p">:</span> <span class="s">&quot;WARN: System is failing&quot;</span><span class="p">,</span>
+                <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&quot;gl2_remote_ip&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;gl2_remote_port&quot;</span><span class="p">:</span> <span class="mi">56498</span><span class="p">,</span>
+                    <span class="s">&quot;gl2_source_node&quot;</span><span class="p">:</span> <span class="s">&quot;41283fec-36b4-4352-a859-7b3d79846b3c&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;gl2_source_input&quot;</span><span class="p">:</span> <span class="s">&quot;55f15092bee8e2841898eb53&quot;</span>
+                <span class="p">},</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;b7b08150-57a0-11e5-b2a2-d6b4cd83d1d5&quot;</span><span class="p">,</span>
+                <span class="s">&quot;stream_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s">&quot;55f1509dbee8e2841898eb64&quot;</span>
+                <span class="p">],</span>
+                <span class="s">&quot;source&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s">&quot;2015-09-10T09:45:49.284Z&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s">&quot;index&quot;</span><span class="p">:</span> <span class="s">&quot;graylog2_7&quot;</span><span class="p">,</span>
+                <span class="s">&quot;message&quot;</span><span class="p">:</span> <span class="s">&quot;ERROR: This is an example error message&quot;</span><span class="p">,</span>
+                <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&quot;gl2_remote_ip&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;gl2_remote_port&quot;</span><span class="p">:</span> <span class="mi">56481</span><span class="p">,</span>
+                    <span class="s">&quot;gl2_source_node&quot;</span><span class="p">:</span> <span class="s">&quot;41283fec-36b4-4352-a859-7b3d79846b3c&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;gl2_source_input&quot;</span><span class="p">:</span> <span class="s">&quot;55f15092bee8e2841898eb53&quot;</span>
+                <span class="p">},</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;afd71342-57a0-11e5-b2a2-d6b4cd83d1d5&quot;</span><span class="p">,</span>
+                <span class="s">&quot;stream_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s">&quot;55f1509dbee8e2841898eb64&quot;</span>
+                <span class="p">],</span>
+                <span class="s">&quot;source&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+                <span class="s">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s">&quot;2015-09-10T09:45:36.116Z&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s">&quot;stream&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;creator_user_id&quot;</span><span class="p">:</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+        <span class="s">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s">&quot;matching_type&quot;</span><span class="p">:</span> <span class="s">&quot;AND&quot;</span><span class="p">,</span>
+        <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;test stream&quot;</span><span class="p">,</span>
+        <span class="s">&quot;created_at&quot;</span><span class="p">:</span> <span class="s">&quot;2015-09-10T09:42:53.833Z&quot;</span><span class="p">,</span>
+        <span class="s">&quot;disabled&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+        <span class="s">&quot;rules&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;field&quot;</span><span class="p">:</span> <span class="s">&quot;gl2_source_input&quot;</span><span class="p">,</span>
+                <span class="s">&quot;stream_id&quot;</span><span class="p">:</span> <span class="s">&quot;55f1509dbee8e2841898eb64&quot;</span><span class="p">,</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;55f150b5bee8e2841898eb7f&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s">&quot;inverted&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;55f15092bee8e2841898eb53&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;alert_conditions&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;creator_user_id&quot;</span><span class="p">:</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+                <span class="s">&quot;created_at&quot;</span><span class="p">:</span> <span class="s">&quot;2015-09-10T09:44:10.552Z&quot;</span><span class="p">,</span>
+                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;5e7a9c8d-9bb1-47b6-b8db-4a3a83a25e0c&quot;</span><span class="p">,</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;message_count&quot;</span><span class="p">,</span>
+                <span class="s">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&quot;grace&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s">&quot;threshold&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s">&quot;threshold_type&quot;</span><span class="p">:</span> <span class="s">&quot;more&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;backlog&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="mi">1</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;55f1509dbee8e2841898eb64&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;test&quot;</span><span class="p">,</span>
+        <span class="s">&quot;content_pack&quot;</span><span class="p">:</span> <span class="n">null</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="alert-callback-history">
+<h3>Alert callback history<a class="headerlink" href="#alert-callback-history" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes sending alert callbacks may fail for some reason. Graylog provides an alert callback history for those ocasions,
+helping you to debug and fix any problems that may arise.</p>
+<img alt="../_images/alert_callback_history.png" src="../_images/alert_callback_history.png" />
+<p>To check the status of alert callbacks, go to the <em>Streams</em> page, and click on the <em>Manage alerts</em> button next to the stream
+containing the alert callbacks. You can find the alert callback history at the bottom of that page, in the <em>Triggered alerts</em>
+section.</p>
+<p>On the list of alerts, clicking on <em>Show callbacks</em> will open a list of all the callbacks involved in the alert, including
+their status and configuration at the time the alert was triggered.</p>
+</div>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>The stream output system allows you to forward every message that is routed into a stream to other destinations.</p>
+<p>Outputs are managed globally (like message inputs) and not for single streams. You can create new outputs and activate them
+for as many streams as you like. This way you can configure a forwarding destination once and select multiple streams to use it.</p>
+<p>Graylog ships with default outputs and can be extended with <a class="reference internal" href="plugins.html"><em>Plugins</em></a>.</p>
+</div>
+<div class="section" id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<p>These are a few example use cases for streams:</p>
+<ul class="simple">
+<li>Forward a subset of messages to other data analysis or BI systems to reduce their license costs.</li>
+<li>Monitor exception or error rates in your whole environment and broken down per subsystem.</li>
+<li>Get a list of all failed SSH logins and use the <em>quickvalues</em> to analyze which user names where affected.</li>
+<li>Catch all HTTP POST requests to <code class="docutils literal"><span class="pre">/login</span></code> that were answered with a HTTP 302 and route them into a stream called
+<em>Successful user logins</em>. Now get a chart of when users logged in and use the <em>quickvalues</em> to get a list of users that performed
+the most logins in the search time frame.</li>
+</ul>
+</div>
+<div class="section" id="how-are-streams-processed-internally">
+<h2>How are streams processed internally?<a class="headerlink" href="#how-are-streams-processed-internally" title="Permalink to this headline">¶</a></h2>
+<p>The most important thing to know about Graylog stream matching is that there is no duplication of stored messages. Every message that comes
+in is matched against all rules of a stream. The internal ID of every stream that has <em>all</em> rules matching is appended to the <code class="docutils literal"><span class="pre">streams</span></code>
+array of the processed message.</p>
+<p>All analysis methods and searches that are bound to streams can now easily narrow their operation by searching with a
+<code class="docutils literal"><span class="pre">streams:[STREAM_ID]</span></code> limit. This is done automatically by Graylog and does not have to be provided by the user.</p>
+<img alt="../_images/internal_stream_processing.png" src="../_images/internal_stream_processing.png" />
+</div>
+<div class="section" id="stream-processing-runtime-limits">
+<h2>Stream Processing Runtime Limits<a class="headerlink" href="#stream-processing-runtime-limits" title="Permalink to this headline">¶</a></h2>
+<p>An important step during the processing of a message is the stream classification. Every message is matched against the user-configured
+stream rules. If every rule of a stream matches, the message is added to this stream. Applying stream rules is done during the indexing
+of a message only, so the amount of time spent for the classification of a message is crucial for the overall performance and message
+throughput the system can handle.</p>
+<p>There are certain scenarios when a stream rule takes very long to match. When this happens for a number of messages, message processing
+can stall, messages waiting for processing accumulate in memory and the whole system could become non-responsive. Messages are lost and
+manual intervention would be necessary. This is the worst case scenario.</p>
+<p>To prevent this, the runtime of stream rule matching is limited. When it is taking longer than the configured runtime limit, the process
+of matching this exact message against the rules of this specific stream is aborted. Message processing in general and for this specific
+message continues though. As the runtime limit needs to be configured pretty high (usually a magnitude higher as a regular stream rule
+match takes), any excess of it is considered a fault and is recorded for this stream. If the number of recorded faults for a single stream
+is higher than a configured threshold, the stream rule set of this stream is considered faulty and the stream is disabled. This is done
+to protect the overall stability and performance of message processing. Obviously, this is a tradeoff and based on the assumption, that
+the total loss of one or more messages is worse than a loss of stream classification for these.</p>
+<p>There are scenarios where this might not be applicable or even detrimental. If there is a high fluctuation of the message load including
+situations where the message load is much higher than the system can handle, overall stream matching can take longer than the configured
+timeout. If this happens repeatedly, all streams get disabled. This is a clear indicator that your system is overutilized and not able
+to handle the peak message load.</p>
+<div class="section" id="how-to-configure-the-timeout-values-if-the-defaults-do-not-match">
+<h3>How to configure the timeout values if the defaults do not match<a class="headerlink" href="#how-to-configure-the-timeout-values-if-the-defaults-do-not-match" title="Permalink to this headline">¶</a></h3>
+<p>There are two configuration variables in the configuration file of the server, which influence the behavior of this functionality.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">stream_processing_timeout</span></code> defines the maximum amount of time the rules of a stream are able to spend. When this is exceeded, stream
+rule matching for this stream is aborted and a fault is recorded. This setting is defined in milliseconds, the default is <code class="docutils literal"><span class="pre">2000</span></code> (2 seconds).</li>
+<li><code class="docutils literal"><span class="pre">stream_processing_max_faults</span></code> is the maximum number of times a single stream can exceed this runtime limit. When it happens more often,
+the stream is disabled until it is manually reenabled. The default for this setting is <code class="docutils literal"><span class="pre">3</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="what-could-cause-it">
+<h3>What could cause it?<a class="headerlink" href="#what-could-cause-it" title="Permalink to this headline">¶</a></h3>
+<p>If a single stream has been disabled and all others are doing well, the chances are high that one or more stream rules are performing bad under
+certain circumstances. In most cases, this is related to stream rules which are utilizing regular expressions. For most other stream rules types
+the general runtime is constant, while it varies very much for regular expressions, influenced by the regular expression itself and the input
+matched against it. In some special cases, the difference between a match and a non-match of a regular expression can be in the order of 100
+or even 1000. This is caused by a phenomenon called <em>catastrophic backtracking</em>. There are good write-ups about it on the web which will help
+you understanding it.</p>
+</div>
+<div class="section" id="summary-how-do-i-solve-it">
+<h3>Summary: How do I solve it?<a class="headerlink" href="#summary-how-do-i-solve-it" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Check the rules of the stream that is disabled for rules that could take very long (especially regular expressions).</li>
+<li>Modify or delete those stream rules.</li>
+<li>Re-enable the stream.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="programmatic-access-via-the-rest-api">
+<h2>Programmatic access via the REST API<a class="headerlink" href="#programmatic-access-via-the-rest-api" title="Permalink to this headline">¶</a></h2>
+<p>Many organisations already run monitoring infrastructure that are able to alert operations staff when incidents are detected.
+These systems are often capable of either polling for information on a regular schedule or being pushed new alerts - this article describes how to
+use the Graylog Stream Alert API to poll for currently active alerts in order to further process them in third party products.</p>
+<div class="section" id="checking-for-currently-active-alert-triggered-conditions">
+<h3>Checking for currently active alert/triggered conditions<a class="headerlink" href="#checking-for-currently-active-alert-triggered-conditions" title="Permalink to this headline">¶</a></h3>
+<p>Graylog stream alerts can currently be configured to send emails when one or more of the associated alert conditions evaluate to true. While
+sending email solves many immediate problems when it comes to alerting, it can be helpful to gain programmatic access to the currently active alerts.</p>
+<p>Each stream which has alerts configured also has a list of active alerts, which can potentially be empty if there were no alerts so far.
+Using the stream&#8217;s ID, one can check the current state of the alert conditions associated with the stream using the authenticated API call:</p>
+<div class="highlight-python"><div class="highlight"><pre>GET /streams/&lt;streamid&gt;/alerts/check
+</pre></div>
+</div>
+<p>It returns a description of the configured conditions as well as a count of how many triggered the alert. This data can be used to for example
+send SNMP traps in other parts of the monitoring system.</p>
+<p>Sample JSON return value:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;total_triggered&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s">&quot;condition&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;984d04d5-1791-4500-a17e-cd9621cc2ea7&quot;</span><span class="p">,</span>
+        <span class="s">&quot;in_grace&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+        <span class="s">&quot;created_at&quot;</span><span class="p">:</span> <span class="s">&quot;2014-06-11T12:42:50.312Z&quot;</span><span class="p">,</span>
+        <span class="s">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s">&quot;field&quot;</span><span class="p">:</span> <span class="s">&quot;one_minute_rate&quot;</span><span class="p">,</span>
+          <span class="s">&quot;grace&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s">&quot;backlog&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s">&quot;threshold_type&quot;</span><span class="p">:</span> <span class="s">&quot;lower&quot;</span><span class="p">,</span>
+          <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;mean&quot;</span><span class="p">,</span>
+          <span class="s">&quot;threshold&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s">&quot;creator_user_id&quot;</span><span class="p">:</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;field_value&quot;</span>
+      <span class="p">},</span>
+      <span class="s">&quot;triggered&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="s">&quot;calculated_at&quot;</span><span class="p">:</span> <span class="s">&quot;2014-06-12T13:44:20.704Z&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the result is cached for 30 seconds.</p>
+</div>
+<div class="section" id="list-of-already-triggered-stream-alerts">
+<h3>List of already triggered stream alerts<a class="headerlink" href="#list-of-already-triggered-stream-alerts" title="Permalink to this headline">¶</a></h3>
+<p>Checking the current state of a stream&#8217;s alerts can be useful to trigger alarms in other monitoring systems, but if one wants to send more detailed
+messages to operations, it can be very helpful to get more information about the current state of the stream, for example the list of all triggered
+alerts since a certain timestamp.</p>
+<p>This information is available per stream using the call:</p>
+<div class="highlight-python"><div class="highlight"><pre>GET /streams/&lt;streamid&gt;/alerts?since=1402460923
+</pre></div>
+</div>
+<p>The since parameter is a unix timestamp value. Its return value could be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;total&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s">&quot;alerts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;539878473004e72240a5c829&quot;</span><span class="p">,</span>
+      <span class="s">&quot;condition_id&quot;</span><span class="p">:</span> <span class="s">&quot;984d04d5-1791-4500-a17e-cd9621cc2ea7&quot;</span><span class="p">,</span>
+      <span class="s">&quot;condition_parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;field&quot;</span><span class="p">:</span> <span class="s">&quot;one_minute_rate&quot;</span><span class="p">,</span>
+        <span class="s">&quot;grace&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">&quot;backlog&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;threshold_type&quot;</span><span class="p">:</span> <span class="s">&quot;lower&quot;</span><span class="p">,</span>
+        <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;mean&quot;</span><span class="p">,</span>
+        <span class="s">&quot;threshold&quot;</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="p">},</span>
+      <span class="s">&quot;description&quot;</span><span class="p">:</span> <span class="s">&quot;Field one_minute_rate had a mean of 0.0 in the last 1 minutes with trigger condition lower than 1.0. (Current grace time: 1 minutes)&quot;</span><span class="p">,</span>
+      <span class="s">&quot;triggered_at&quot;</span><span class="p">:</span> <span class="s">&quot;2014-06-11T15:39:51.780Z&quot;</span><span class="p">,</span>
+      <span class="s">&quot;stream_id&quot;</span><span class="p">:</span> <span class="s">&quot;53984d8630042acb39c79f84&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Using this information more detailed messages can be produced, since the response contains more detailed information about the nature of the
+alert, as well as the number of alerts triggered since the timestamp provided.</p>
+<p>Note that currently a maximum of 300 alerts will be returned.</p>
+</div>
+</div>
+<div class="section" id="faqs">
+<h2>FAQs<a class="headerlink" href="#faqs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-regular-expressions-for-stream-matching">
+<h3>Using regular expressions for stream matching<a class="headerlink" href="#using-regular-expressions-for-stream-matching" title="Permalink to this headline">¶</a></h3>
+<p>Stream rules support matching field values using regular expressions.
+Graylog uses the <a class="reference external" href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Java Pattern class</a> to execute regular expressions.</p>
+<p>For the individual elements of regular expression syntax, please refer to Oracle&#8217;s documentation, however the syntax largely follows the familiar
+regular expression languages in widespread use today and will be familiar to most.</p>
+<p>However, one key question that is often raised is matching a string in case insensitive manner. Java regular expressions are case sensitive by
+default. Certain flags, such as the one to ignore case sensitivity can either be set in the code, or as an inline flag in the regular expression.</p>
+<p>To for example route every message that matches the browser name in the following user agent string:</p>
+<div class="highlight-python"><div class="highlight"><pre>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36
+</pre></div>
+</div>
+<p>the regular expression <code class="docutils literal"><span class="pre">.*applewebkit.*</span></code> will not match because it is case sensitive.
+In order to match the expression using any combination of upper- and lowercase characters use the <code class="docutils literal"><span class="pre">(?i)</span></code> flag as such:</p>
+<div class="highlight-python"><div class="highlight"><pre>(?i).*applewebkit.*
+</pre></div>
+</div>
+<p>Most of the other flags supported by Java are rarely used in the context of matching stream rules or extractors, but if you need them their use
+is documented on the same Javadoc page by Oracle.</p>
+</div>
+<div class="section" id="can-i-add-messages-to-a-stream-after-they-were-processed-and-stored">
+<h3>Can I add messages to a stream after they were processed and stored?<a class="headerlink" href="#can-i-add-messages-to-a-stream-after-they-were-processed-and-stored" title="Permalink to this headline">¶</a></h3>
+<p>No. Currently there is no way to re-process or re-match messages into streams.</p>
+<p>Only new messages are routed into the current set of streams.</p>
+</div>
+<div class="section" id="can-i-write-own-outputs-or-alert-callbacks-methods">
+<h3>Can I write own outputs or alert callbacks methods?<a class="headerlink" href="#can-i-write-own-outputs-or-alert-callbacks-methods" title="Permalink to this headline">¶</a></h3>
+<p>Yes. Please refer to the <a class="reference internal" href="plugins.html"><em>Plugins</em></a> documentation page.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dashboards.html" class="btn btn-neutral float-right" title="Dashboards" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="queries.html" class="btn btn-neutral" title="Searching" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Manual Setup &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Installing Graylog" href="../installation.html"/>
+        <link rel="next" title="Configuring and tuning Elasticsearch" href="../configuring_es.html"/>
+        <link rel="prev" title="Microsoft Windows" href="windows.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../installation.html">Installing Graylog</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="virtual_machine_appliances.html">Virtual Machine Appliances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graylog_ctl.html">The graylog-ctl script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operating_system_packages.html">Operating System Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_management_tools.html">Chef, Puppet, Ansible, Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openstack.html">OpenStack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aws.html">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">Microsoft Windows</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Manual Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#graylog-server-on-linux">Graylog server on Linux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#downloading-and-extracting-the-server">Downloading and extracting the server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starting-the-server">Starting the server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#supplying-external-logging-configuration">Supplying external logging configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-line-cli-parameters">Command line (CLI) parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#problems-with-ipv6-vs-ipv4">Problems with IPv6 vs. IPv4?</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#graylog-web-interface-on-linux">Graylog web interface on Linux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Prerequisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#downloading-and-extracting-the-web-interface">Downloading and extracting the web-interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-the-web-interface">Configuring the web interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starting-the-web-interface">Starting the web interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#custom-configuration-file-path">Custom configuration file path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-message-input-and-send-a-first-message">Create a message input and send a first message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#https">HTTPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-logging">Configuring logging</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../installation.html">Installing Graylog</a> &raquo;</li>
+      
+    <li>Manual Setup</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/pages/installation/manual_setup.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="manual-setup">
+<h1>Manual Setup<a class="headerlink" href="#manual-setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="graylog-server-on-linux">
+<h2>Graylog server on Linux<a class="headerlink" href="#graylog-server-on-linux" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>You will need to have the following services installed on either the host you are running <code class="docutils literal"><span class="pre">graylog-server</span></code> on or on dedicated machines:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.elastic.co/downloads/elasticsearch">Elasticsearch 1.7 or later</a> (Elasticsearch 2.x is currently not supported)</li>
+<li>MongoDB (as recent stable version as possible, <strong>at least v2.0</strong>)</li>
+</ul>
+<p>Most standard MongoDB packages of Linux distributions are outdated. Use the <a class="reference external" href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-debian/">official MongoDB APT repository</a>
+(available for many distributions and operating systems)</p>
+<p>You also <strong>must</strong> install <strong>Java 7</strong> or higher! Java 6 is not compatible with Graylog and will also not receive any more publicly available bug and security
+fixes by Oracle.</p>
+<p>A more detailed guide for installing the dependencies will follow. <strong>The only important thing for Elasticsearch is that you set
+the exactly same cluster name (e. g. ``cluster.name: graylog``) that is being used by Graylog in the Elasticsearch configuration (``conf/elasticsearch.yml``)</strong>.</p>
+</div>
+<div class="section" id="downloading-and-extracting-the-server">
+<h3>Downloading and extracting the server<a class="headerlink" href="#downloading-and-extracting-the-server" title="Permalink to this headline">¶</a></h3>
+<p>Download the tar archive from the <a class="reference external" href="https://www.graylog.org/download/">download pages</a> and extract it on your system:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ tar xvfz graylog-VERSION.tgz
+~$ cd graylog-VERSION
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>Now copy the example configuration file:</p>
+<div class="highlight-python"><div class="highlight"><pre>~# cp graylog.conf.example /etc/graylog/server/server.conf
+</pre></div>
+</div>
+<p>You can leave most variables as they are for a first start. All of them should be well documented.</p>
+<p>Configure at least the following variables in <code class="docutils literal"><span class="pre">/etc/graylog/server/server.conf</span></code>:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">is_master</span> <span class="pre">=</span> <span class="pre">true</span></code></dt>
+<dd><ul class="first last simple">
+<li>Set only one <code class="docutils literal"><span class="pre">graylog-server</span></code> node as the master. This node will perform periodical and maintenance actions that slave nodes won&#8217;t.
+Every slave node will accept messages just as the master nodes. Nodes will fall back to slave mode if there already is a master in the
+cluster.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">password_secret</span></code></dt>
+<dd><ul class="first last simple">
+<li>You must set a secret that is used for password encryption and salting here. The server will refuse to start if it&#8217;s not set. Generate
+a secret with for example <code class="docutils literal"><span class="pre">pwgen</span> <span class="pre">-N</span> <span class="pre">1</span> <span class="pre">-s</span> <span class="pre">96</span></code>.  If you run multiple <code class="docutils literal"><span class="pre">graylog-server</span></code> nodes, make sure you use the same
+<code class="docutils literal"><span class="pre">password_secret</span></code> for all of them!</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">root_password_sha2</span></code></dt>
+<dd><ul class="first last simple">
+<li>A SHA2 hash of a password you will use for your initial login. Set this to a SHA2 hash generated with <code class="docutils literal"><span class="pre">echo</span> <span class="pre">-n</span> <span class="pre">yourpassword</span> <span class="pre">|</span> <span class="pre">shasum</span> <span class="pre">-a</span> <span class="pre">256</span></code>
+and you will be able to log in to the web interface with username <em>admin</em> and password <em>yourpassword</em>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">elasticsearch_max_docs_per_index</span> <span class="pre">=</span> <span class="pre">20000000</span></code></dt>
+<dd><ul class="first last simple">
+<li>How many log messages to keep per index. This setting multiplied with <code class="docutils literal"><span class="pre">elasticsearch_max_number_of_indices</span></code> results in the maximum number of
+messages in your Graylog setup. It is always better to have several more smaller indices than just a few larger ones.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">elasticsearch_max_number_of_indices</span> <span class="pre">=</span> <span class="pre">20</span></code></dt>
+<dd><ul class="first last simple">
+<li>How many indices to have in total. If this number is reached, the oldest index will be deleted. <strong>Also take a look at the other retention
+strategies that allow you to automatically delete messages based on their age.</strong></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">elasticsearch_shards</span> <span class="pre">=</span> <span class="pre">4</span></code></dt>
+<dd><ul class="first last simple">
+<li>The number of shards for your indices. A good setting here highly depends on the number of nodes in your Elasticsearch cluster. If you have
+one node, set it to <code class="docutils literal"><span class="pre">1</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">elasticsearch_replicas</span> <span class="pre">=</span> <span class="pre">0</span></code></dt>
+<dd><ul class="first last simple">
+<li>The number of replicas for your indices. A good setting here highly depends on the number of nodes in your Elasticsearch cluster. If you
+have one node, set it to <code class="docutils literal"><span class="pre">0</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">mongodb_*</span></code></dt>
+<dd><ul class="first last simple">
+<li>Enter your MongoDB connection and authentication information here. Make sure that you connect the web interface to the same database.
+You don&#8217;t need to configure <code class="docutils literal"><span class="pre">mongodb_user</span></code> and <code class="docutils literal"><span class="pre">mongodb_password</span></code> if <code class="docutils literal"><span class="pre">mongodb_useauth</span></code> is set to <code class="docutils literal"><span class="pre">false</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="starting-the-server">
+<h3>Starting the server<a class="headerlink" href="#starting-the-server" title="Permalink to this headline">¶</a></h3>
+<p>You need to have Java installed. Running the OpenJDK is totally fine and should be available on all platforms. For example on Debian it is:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ apt-get install openjdk-7-jre
+</pre></div>
+</div>
+<p><strong>You need at least Java 7</strong> as Java 6 has reached EOL.</p>
+<p>Start the server:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ cd bin/
+~$ ./graylogctl start
+</pre></div>
+</div>
+<p>The server will try to write a <code class="docutils literal"><span class="pre">node_id</span></code> to the <code class="docutils literal"><span class="pre">graylog-server-node-id</span></code> file. It won&#8217;t start if it can&#8217;t write there because of for
+example missing permissions.</p>
+<p>See the startup parameters description below to learn more about available startup parameters. Note that you might have to be <cite>root</cite>
+to bind to the popular port 514 for syslog inputs.</p>
+<p>You should see a line like this in the debug output of <code class="docutils literal"><span class="pre">graylog-server</span></code> successfully connected to your Elasticsearch cluster:</p>
+<div class="highlight-python"><div class="highlight"><pre>2013-10-01 12:13:22,382 DEBUG: org.elasticsearch.transport.netty - [graylog-server] connected to node [[Unuscione, Angelo][thN_gIBkQDm2ab7k-2Zaaw][inet[/10.37.160.227:9300]]]
+</pre></div>
+</div>
+<p>You can find the <code class="docutils literal"><span class="pre">graylog-server</span></code> logs in the directory <code class="docutils literal"><span class="pre">logs/</span></code>.</p>
+<p><strong>Important:</strong> All <code class="docutils literal"><span class="pre">graylog-server</span></code> instances must have synchronised time. We strongly recommend to use
+<a class="reference external" href="http://en.wikipedia.org/wiki/Network_Time_Protocol">NTP</a> or similar mechanisms on all machines of your Graylog infrastructure.</p>
+</div>
+<div class="section" id="supplying-external-logging-configuration">
+<h3>Supplying external logging configuration<a class="headerlink" href="#supplying-external-logging-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">graylog-server</span></code> uses Log4j for its internal logging and ships with a
+<a class="reference external" href="https://github.com/Graylog2/graylog2-server/blob/1.2/graylog2-bootstrap/src/main/resources/log4j.xml">default log configuration file</a>
+which is embedded within the shipped JAR.</p>
+<p>In case you need to overwrite the configuration <code class="docutils literal"><span class="pre">graylog-server</span></code> uses, you can supply a Java system property specifying the path to
+the configuration file in your <code class="docutils literal"><span class="pre">graylogctl</span></code> script. Append this before the <cite>-jar</cite> paramter:</p>
+<div class="highlight-python"><div class="highlight"><pre>-Dlog4j.configuration=file:///tmp/logj4.xml
+</pre></div>
+</div>
+<p>Substitute the actual path to the file for the <code class="docutils literal"><span class="pre">/tmp/log4j.xml</span></code> in the example.</p>
+<p>In case you do not have a log rotation system already in place, you can also configure Graylog to rotate logs based on their size to prevent its
+logs to grow without bounds.</p>
+<p>One such example <code class="docutils literal"><span class="pre">log4j.xml</span></code> configuration is shown below. Graylog includes the <code class="docutils literal"><span class="pre">log4j-extras</span></code> companion classes to support time based and size
+based log rotation. This is the example:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE log4j:configuration PUBLIC &quot;-//APACHE//DTD LOG4J 1.2//EN&quot; &quot;log4j.dtd&quot;&gt;
+&lt;log4j:configuration xmlns:log4j=&quot;http://jakarta.apache.org/log4j/&quot;&gt;
+
+    &lt;appender name=&quot;FILE&quot; class=&quot;org.apache.log4j.rolling.RollingFileAppender&quot;&gt;
+        &lt;rollingPolicy class=&quot;org.apache.log4j.rolling.FixedWindowRollingPolicy&quot; &gt;
+            &lt;param name=&quot;activeFileName&quot; value=&quot;/tmp/server.log&quot; /&gt; &lt;!-- ADAPT --&gt;
+            &lt;param name=&quot;fileNamePattern&quot; value=&quot;/tmp/server.%i.log&quot; /&gt; &lt;!-- ADAPT --&gt;
+            &lt;param name=&quot;minIndex&quot; value=&quot;1&quot; /&gt; &lt;!-- ADAPT --&gt;
+            &lt;param name=&quot;maxIndex&quot; value=&quot;10&quot; /&gt; &lt;!-- ADAPT --&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;triggeringPolicy class=&quot;org.apache.log4j.rolling.SizeBasedTriggeringPolicy&quot;&gt;
+            &lt;param name=&quot;maxFileSize&quot; value=&quot;5767168&quot; /&gt; &lt;!-- ADAPT: For example 5.5MB in bytes --&gt;
+        &lt;/triggeringPolicy&gt;
+        &lt;layout class=&quot;org.apache.log4j.PatternLayout&quot;&gt;
+            &lt;param name=&quot;ConversionPattern&quot; value=&quot;%d %-5p: %c - %m%n&quot;/&gt;
+        &lt;/layout&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- Application Loggers --&gt;
+    &lt;logger name=&quot;org.graylog2&quot;&gt;
+        &lt;level value=&quot;info&quot;/&gt;
+    &lt;/logger&gt;
+    &lt;!-- this emits a harmless warning for ActiveDirectory every time which we can&#39;t work around :( --&gt;
+    &lt;logger name=&quot;org.apache.directory.api.ldap.model.message.BindRequestImpl&quot;&gt;
+        &lt;level value=&quot;error&quot;/&gt;
+    &lt;/logger&gt;
+    &lt;!-- Root Logger --&gt;
+    &lt;root&gt;
+        &lt;priority value=&quot;info&quot;/&gt;
+        &lt;appender-ref ref=&quot;FILE&quot;/&gt;
+    &lt;/root&gt;
+
+&lt;/log4j:configuration&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-cli-parameters">
+<h3>Command line (CLI) parameters<a class="headerlink" href="#command-line-cli-parameters" title="Permalink to this headline">¶</a></h3>
+<p>There are a number of CLI parameters you can pass to the call in your <code class="docutils literal"><span class="pre">graylogctl</span></code> script:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">-h</span></code>, <code class="docutils literal"><span class="pre">--help</span></code>: Show help message</li>
+<li><code class="docutils literal"><span class="pre">-f</span> <span class="pre">CONFIGFILE</span></code>, <code class="docutils literal"><span class="pre">--configfile</span> <span class="pre">CONFIGFILE</span></code>: Use configuration file <cite>CONFIGFILE</cite> for Graylog; default: <code class="docutils literal"><span class="pre">/etc/graylog/server/server.conf</span></code></li>
+<li><code class="docutils literal"><span class="pre">-t</span></code>, <code class="docutils literal"><span class="pre">--configtest</span></code>: Validate the Graylog configuration and exit with exit code 0 if the configuration file is syntactically correct, exit code 1 and a description of the error otherwise</li>
+<li><code class="docutils literal"><span class="pre">-d</span></code>, <code class="docutils literal"><span class="pre">--debug</span></code>: Run in debug mode</li>
+<li><code class="docutils literal"><span class="pre">-l</span></code>, <code class="docutils literal"><span class="pre">--local</span></code>: Run in local mode. Automatically invoked if in debug mode. Will not send system statistics, even if enabled and allowed. Only interesting for development and testing purposes.</li>
+<li><code class="docutils literal"><span class="pre">-s</span></code>, <code class="docutils literal"><span class="pre">--statistics</span></code>: Print utilization statistics to STDOUT</li>
+<li><code class="docutils literal"><span class="pre">-r</span></code>, <code class="docutils literal"><span class="pre">--no-retention</span></code>: Do not automatically delete old/outdated indices</li>
+<li><code class="docutils literal"><span class="pre">-p</span> <span class="pre">PIDFILE</span></code>, <code class="docutils literal"><span class="pre">--pidfile</span> <span class="pre">PIDFILE</span></code>: Set the file containing the PID of graylog to <cite>PIDFILE</cite>; default: <cite>/tmp/graylog.pid</cite></li>
+<li><code class="docutils literal"><span class="pre">-np</span></code>, <code class="docutils literal"><span class="pre">--no-pid-file</span></code>: Do not write PID file (overrides <cite>-p</cite>/<cite>&#8211;pidfile</cite>)</li>
+<li><code class="docutils literal"><span class="pre">--version</span></code>: Show version of Graylog and exit</li>
+</ul>
+</div>
+<div class="section" id="problems-with-ipv6-vs-ipv4">
+<h3>Problems with IPv6 vs. IPv4?<a class="headerlink" href="#problems-with-ipv6-vs-ipv4" title="Permalink to this headline">¶</a></h3>
+<p>If your <cite>graylog-server</cite> instance refuses to listen on IPv4 addresses and always chooses for example a <cite>rest_listen_address</cite> like <cite>:::12900</cite>
+you can tell the JVM to prefer the IPv4 stack.</p>
+<p>Add the <cite>java.net.preferIPv4Stack</cite> flag in your <cite>graylogctl</cite> script or from wherever you are calling the <cite>graylog.jar</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ sudo -u graylog java -Djava.net.preferIPv4Stack=true -jar graylog.jar
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="graylog-web-interface-on-linux">
+<h2>Graylog web interface on Linux<a class="headerlink" href="#graylog-web-interface-on-linux" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Prerequisites<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The only thing you need is at least one compatible <code class="docutils literal"><span class="pre">graylog-server</span></code> node. Please use the same version number to make sure that it
+is compatible.</p>
+<p>You also <strong>must</strong> use <strong>Java 7</strong>! Java 6 is not compatible with Graylog and will also not receive any more publicly available bug
+and security fixes by Oracle.</p>
+</div>
+<div class="section" id="downloading-and-extracting-the-web-interface">
+<h3>Downloading and extracting the web-interface<a class="headerlink" href="#downloading-and-extracting-the-web-interface" title="Permalink to this headline">¶</a></h3>
+<p>Download the package from the <a class="reference external" href="https://www.graylog.org/download/">download pages</a>.</p>
+<p>Extract the archive:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ tar xvfz graylog-web-interface-VERSION.tgz
+~$ cd graylog-web-interface-VERSION
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuring-the-web-interface">
+<h3>Configuring the web interface<a class="headerlink" href="#configuring-the-web-interface" title="Permalink to this headline">¶</a></h3>
+<p>Open <code class="docutils literal"><span class="pre">conf/graylog-web-interface.conf</span></code> and set the two following variables:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">graylog2-server.uris=&quot;http://127.0.0.1:12900/&quot;</span></code>: This is the list of <code class="docutils literal"><span class="pre">graylog-server</span></code> nodes the web interface will try to use.
+You can configure one or multiple, separated by commas. Use the <code class="docutils literal"><span class="pre">rest_listen_uri</span></code> (configured in <code class="docutils literal"><span class="pre">graylog.conf</span></code>) of your <code class="docutils literal"><span class="pre">graylog-server</span></code> instances here.</li>
+<li><code class="docutils literal"><span class="pre">application.secret=&quot;&quot;</span></code>: A secret for encryption. Use a long, randomly generated string here. (for example generated using <code class="docutils literal"><span class="pre">pwgen</span> <span class="pre">-N</span> <span class="pre">1</span> <span class="pre">-s</span> <span class="pre">96</span></code>)</li>
+</ul>
+</div>
+<div class="section" id="starting-the-web-interface">
+<h3>Starting the web interface<a class="headerlink" href="#starting-the-web-interface" title="Permalink to this headline">¶</a></h3>
+<p>You need to have Java installed. Running the OpenJDK is totally fine and should be available on all platforms. For example on Debian it is:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ apt-get install openjdk-7-jre
+</pre></div>
+</div>
+<p><strong>You need at least Java 7</strong> as Java 6 has reached EOL.</p>
+<p>Now start the web interface:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ bin/graylog-web-interface
+Play server process ID is 5723
+[info] play - Application started (Prod)
+[info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+</pre></div>
+</div>
+<p>The web interface will listen on port 9000. You should see a login screen right away after pointing your browser to it. Log in with username
+<code class="docutils literal"><span class="pre">admin</span></code> and the password you configured at <code class="docutils literal"><span class="pre">root_password_sha2</span></code> in the <code class="docutils literal"><span class="pre">graylog.conf</span></code> of your <code class="docutils literal"><span class="pre">graylog-server</span></code>.</p>
+<p>Changing the listen port and address works like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ bin/graylog-web-interface -Dhttp.port=1234 -Dhttp.address=127.0.0.1
+</pre></div>
+</div>
+<p>Java generally prefers to bind to an IPv6 address if that is supported by your system, while you might want to prefer IPv4. To change Java&#8217;s
+default preference you can pass <code class="docutils literal"><span class="pre">-Djava.net.preferIPv4Stack=true</span></code> to the startup script:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ bin/graylog-web-interface -Djava.net.preferIPv4Stack=true
+</pre></div>
+</div>
+<p>All those <code class="docutils literal"><span class="pre">-D</span></code> settings can also be added to the <code class="docutils literal"><span class="pre">JAVA_OPTS</span></code> environment variable which is being read by the startup script, too.</p>
+<p>You can start the web interface in background for example like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>~$ nohup bin/graylog-web-interface &amp;
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-configuration-file-path">
+<h3>Custom configuration file path<a class="headerlink" href="#custom-configuration-file-path" title="Permalink to this headline">¶</a></h3>
+<p>You can put the configuration file into another directory like this:</p>
+<blockquote>
+<div>~$ bin/graylog-web-interface -Dconfig.file=/etc/graylog-web-interface.conf</div></blockquote>
+</div>
+<div class="section" id="create-a-message-input-and-send-a-first-message">
+<h3>Create a message input and send a first message<a class="headerlink" href="#create-a-message-input-and-send-a-first-message" title="Permalink to this headline">¶</a></h3>
+<p>Log in to the web interface and navigate to <em>System</em> -&gt; <em>Nodes</em>. Select your <code class="docutils literal"><span class="pre">graylog-server</span></code> node there and click on <em>Manage inputs</em>.</p>
+<img alt="../../_images/create_input.png" src="../../_images/create_input.png" />
+<p>Launch a new <em>Raw/Plaintext UDP</em> input, listening on port <code class="docutils literal"><span class="pre">9099</span></code> and listening on <code class="docutils literal"><span class="pre">127.0.0.1</span></code>. No need to configure anything else for now.
+The list of running inputs on that node should show you your new input right away. Let&#8217;s send a message in:</p>
+<div class="highlight-python"><div class="highlight"><pre>echo &quot;Hello Graylog, let&#39;s be friends.&quot; | nc -w 1 -u 127.0.0.1 9099
+</pre></div>
+</div>
+<p>This has sent a short string to the raw UDP input you just opened. Now search for <em>friends</em> using the searchbar on the top and you should already
+see the message you just sent in. Click on it in the table and see it in detail:</p>
+<img alt="../../_images/setup_1.png" src="../../_images/setup_1.png" />
+<p>You have just sent your first message to Graylog! Why not spawn a syslog input and point some of your servers to it? You could also create some user
+accounts for your colleagues.</p>
+</div>
+<div class="section" id="https">
+<h3>HTTPS<a class="headerlink" href="#https" title="Permalink to this headline">¶</a></h3>
+<p>Enabling HTTPS is easy. Just start the web interface like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">bin</span><span class="o">/</span><span class="n">graylog</span><span class="o">-</span><span class="n">web</span><span class="o">-</span><span class="n">interface</span> <span class="o">-</span><span class="n">Dhttps</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">443</span>
+</pre></div>
+</div>
+<p>This will generate self-signed certificate. To use proper certificates you must configure a Java key store. Most signing authorities provide
+instructions on how to create a Java keystore and the official keystore utility docs can be found
+<a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/keytool.html">here</a>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">https.keyStore</span></code> The path to the keystore containing the private key and certificate, if not provided generates a keystore for you</li>
+<li><code class="docutils literal"><span class="pre">https.keyStoreType</span></code> The key store type, defaults to JKS</li>
+<li><code class="docutils literal"><span class="pre">https.keyStorePassword</span></code> The password, defaults to a blank password</li>
+<li><code class="docutils literal"><span class="pre">https.keyStoreAlgorithm</span></code> The key store algorithm, defaults to the platforms default algorithm</li>
+</ul>
+</div></blockquote>
+<p>To disable HTTP without SSL completely and enforce HTTPS, use this parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">Dhttp</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="n">disabled</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuring-logging">
+<h3>Configuring logging<a class="headerlink" href="#configuring-logging" title="Permalink to this headline">¶</a></h3>
+<p>The default setting of the web interface is to write its own logs to <code class="docutils literal"><span class="pre">STDOUT</span></code>. You can take control of the logging by specifying an own
+<a class="reference external" href="http://logback.qos.ch/">Logback</a> configuration file to use:</p>
+<div class="highlight-python"><div class="highlight"><pre>bin/graylog-web-interface -Dlogger.file=/etc/graylog-web-interface-log.xml
+</pre></div>
+</div>
+<p>This is an example Logback configuration file that has a disabled <code class="docutils literal"><span class="pre">STDOUT</span></code> appender and an enabled appender that writes to a file
+(<code class="docutils literal"><span class="pre">/var/log/graylog/web/graylog-web-interface.log</span></code>), keeps 30 days of logs in total and creates a new log file if a file should have
+reached a size of 100MB:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;configuration&gt;
+
+    &lt;!--
+    &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%date %-5level [%thread] - [%logger]- %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    --&gt;
+
+    &lt;appender name=&quot;ROLLING_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;file&gt;/var/log/graylog/web/graylog-web-interface.log&lt;/file&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;FileNamePattern&gt;/var/log/graylog/web/graylog-web-interface.log.%d{yyyy-MM-dd}.%i.log.gz&lt;/FileNamePattern&gt;
+            &lt;MaxHistory&gt;30&lt;/MaxHistory&gt;
+            &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;
+            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;encoder class=&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&gt;
+            &lt;pattern&gt;%date [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;root level=&quot;INFO&quot;&gt;
+        &lt;!--&lt;appender-ref ref=&quot;STDOUT&quot; /&gt;--&gt;
+        &lt;appender-ref ref=&quot;ROLLING_FILE&quot; /&gt;
+    &lt;/root&gt;
+
+&lt;/configuration&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../configuring_es.html" class="btn btn-neutral float-right" title="Configuring and tuning Elasticsearch" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="windows.html" class="btn btn-neutral" title="Microsoft Windows" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OpenStack &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Installing Graylog" href="../installation.html"/>
+        <link rel="next" title="Amazon Web Services" href="aws.html"/>
+        <link rel="prev" title="Vagrant" href="vagrant.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../installation.html">Installing Graylog</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="virtual_machine_appliances.html">Virtual Machine Appliances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graylog_ctl.html">The graylog-ctl script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operating_system_packages.html">Operating System Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_management_tools.html">Chef, Puppet, Ansible, Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vagrant.html">Vagrant</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">OpenStack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-configuration">Basic configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aws.html">Amazon Web Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html">Microsoft Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual_setup.html">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index_model.html">The Graylog index model explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../installation.html">Installing Graylog</a> &raquo;</li>
+      
+    <li>OpenStack</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/pages/installation/openstack.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="openstack">
+<h1>OpenStack<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>These steps will download the Graylog image, uncompress it and import it into the Openstack image store:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget https://packages.graylog2.org/releases/graylog2-omnibus/qcow2/graylog.qcow2.gz
+$ gunzip graylog.qcow2.gz
+$ glance image-create --name=&#39;graylog&#39; --is-public=true --container-format=bare --disk-format=qcow2 --file graylog.qcow2
+</pre></div>
+</div>
+<p>You should now see an image called <cite>graylog</cite> in the Openstack web interface under <cite>Images</cite></p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Launch a new instance of the image, make sure to reserve at least 4GB ram for the instance. After spinning up, login with
+the username <cite>ubuntu</cite> and your selected ssh key. Run the reconfigure program in order to setup Graylog and start all services:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ssh ubuntu@&lt;vm IP&gt;
+$ sudo graylog-ctl reconfigure
+</pre></div>
+</div>
+<p>Open <cite>http://&lt;vm ip&gt;</cite> in your browser to access the Graylog web interface. Default username and password is <cite>admin</cite>.</p>
+<div class="section" id="basic-configuration">
+<h3>Basic configuration<a class="headerlink" href="#basic-configuration" title="Permalink to this headline">¶</a></h3>
+<p>We are shipping the <code class="docutils literal"><span class="pre">graylog-ctl</span></code> tool with the virtual machine appliances to get you started
+with a customised setup as quickly as possible. Run these (optional) commands to configure the
+most basic settings of Graylog in the appliance:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo graylog-ctl set-email-config &lt;smtp server&gt; [--port=&lt;smtp port&gt; --user=&lt;username&gt; --password=&lt;password&gt;]
+sudo graylog-ctl set-admin-password &lt;password&gt;
+sudo graylog-ctl set-timezone &lt;zone acronym&gt;
+sudo graylog-ctl reconfigure
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">graylog-ctl</span></code> has much more functionality and is documented <a class="reference internal" href="graylog_ctl.html#graylog-ctl"><span>here</span></a>.
+We strongly recommend to learn more about it to ensure smooth operation of your virtual appliance.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="aws.html" class="btn btn-neutral float-right" title="Amazon Web Services" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="vagrant.html" class="btn btn-neutral" title="Vagrant" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

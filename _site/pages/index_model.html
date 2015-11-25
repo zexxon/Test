@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Graylog index model explained &mdash; Graylog 1.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.2.0 documentation" href="../index.html"/>
+        <link rel="next" title="Indexer failures and dead letters" href="indexer_failures.html"/>
+        <link rel="prev" title="Load balancer integration" href="load_balancers.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architectural considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing Graylog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_es.html">Configuring and tuning Elasticsearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sending_data.html">Sending in log data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collector.html">Graylog Collector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Searching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dashboards.html">Dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extractors.html">Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="drools.html">Message rewriting with Drools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blacklisting.html">Blacklisting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load balancer integration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">The Graylog index model explained</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eviction-of-indices-and-messages">Eviction of indices and messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#keeping-the-metadata-in-synchronisation">Keeping the metadata in synchronisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manually-cycling-the-deflector">Manually cycling the deflector</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indexer_failures.html">Indexer failures and dead letters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_and_roles.html">Users and Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_dashboards.html">External dashboards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marketplace.html">Graylog Marketplace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideas_explained.html">The thinking behind the Graylog architecture and why it matters to you</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>The Graylog index model explained</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/pages/index_model.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-graylog-index-model-explained">
+<h1>The Graylog index model explained<a class="headerlink" href="#the-graylog-index-model-explained" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Graylog is transparently managing a set of indices to optimise search and analysis operations
+for speed and low resource utilisation. The system is maintaining an index alias called
+<em>graylog_deflector</em> that is always pointing to the current write-active index. We always have
+exactly one index to which new messages are appended until the configured maximum size
+(<code class="docutils literal"><span class="pre">elasticsearch_max_docs_per_index</span></code> in your <code class="docutils literal"><span class="pre">graylog.conf</span></code>) is reached.</p>
+<p>A background task is running every minute and checks if the maximum size is reached. A new
+index is created and prepared when that happens. Once the index is considered to be ready
+to be written to, the <code class="docutils literal"><span class="pre">graylog_deflector</span></code> is atomically switched to the it. That means that
+all writing nodes can always write to the deflector alias without even knowing what the
+currently active write-active index is.</p>
+<p><strong>Note that there are also time based retention settings since v1.0 of Graylog</strong>.
+This allows you to instruct Graylog to keep messages based on their age and not the total
+amount. You can find the corresponding configuration settings in your <code class="docutils literal"><span class="pre">graylog.conf</span></code>.</p>
+<img alt="../_images/index_model_writes.png" src="../_images/index_model_writes.png" />
+<img alt="../_images/index_model_reads.png" src="../_images/index_model_reads.png" />
+<p>Almost every read operation is performed with a given time range. Because Graylog is only
+writing sequentially it can keep a cached collection of information about which index starts
+at what point in time. It selects a lists of indices to query when having a time range provided.
+If no time range is provided it will search in all indices it knows.</p>
+</div>
+<div class="section" id="eviction-of-indices-and-messages">
+<h2>Eviction of indices and messages<a class="headerlink" href="#eviction-of-indices-and-messages" title="Permalink to this headline">¶</a></h2>
+<p>You have configured the maximum number of indices in your <code class="docutils literal"><span class="pre">graylog.conf</span></code>
+(<code class="docutils literal"><span class="pre">elasticsearch_max_number_of_indices</span></code>). When that number is reached the oldest indices will
+automatically be deleted. The deleting is performed by the <cite>graylog-server</cite> master node in a
+background process that is continuously comparing the actual number of indices with the configured
+maximum:</p>
+<div class="highlight-python"><div class="highlight"><pre>elasticsearch_max_docs_per_index * elasticsearch_max_number_of_indices
+  = maximum number of messages stored
+</pre></div>
+</div>
+</div>
+<div class="section" id="keeping-the-metadata-in-synchronisation">
+<h2>Keeping the metadata in synchronisation<a class="headerlink" href="#keeping-the-metadata-in-synchronisation" title="Permalink to this headline">¶</a></h2>
+<p>Graylog will on notify you when the stored metadata about index time ranges has run out of sync.
+This can for example happen when you delete indices by hand. The system will offer you to just
+re-generate all time range information. This may take a few seconds but is an easy task for Graylog.</p>
+<p>You can easily re-build the information yourself after manually deleting indices or doing other
+changes that might cause synchronisation problems:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ curl -XPOST http://127.0.0.1:12900/system/indices/ranges/rebuild
+</pre></div>
+</div>
+<p>This will trigger a systemjob:</p>
+<div class="highlight-python"><div class="highlight"><pre>INFO : org.graylog2.system.jobs.SystemJobManager - Submitted SystemJob &lt;ef7057c0-5ae3-11e3-b935-4c8d79f2b596&gt; [org.graylog2.indexer.ranges.RebuildIndexRangesJob]
+INFO : org.graylog2.indexer.ranges.RebuildIndexRangesJob - Re-calculating index ranges.
+INFO : org.graylog2.indexer.ranges.RebuildIndexRangesJob - Calculated range of [graylog2_56] in [640ms].
+INFO : org.graylog2.indexer.ranges.RebuildIndexRangesJob - Calculated range of [graylog2_18] in [66ms].
+...
+INFO : org.graylog2.indexer.ranges.RebuildIndexRangesJob - Done calculating index ranges for 88 indices. Took 4744ms.
+INFO : org.graylog2.system.jobs.SystemJobManager - SystemJob &lt;ef7057c0-5ae3-11e3-b935-4c8d79f2b596&gt; [org.graylog2.indexer.ranges.RebuildIndexRangesJob] finished in 4758ms.
+</pre></div>
+</div>
+</div>
+<div class="section" id="manually-cycling-the-deflector">
+<h2>Manually cycling the deflector<a class="headerlink" href="#manually-cycling-the-deflector" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you might want to cycle the deflector manually and not wait until the configured maximum
+number of messages in the newest index is reached. You can do this either via a REST call against
+the <cite>graylog-server</cite> master node or via the web interface:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ curl -XPOST http://127.0.0.1:12900/system/deflector/cycle
+</pre></div>
+</div>
+<img alt="../_images/recalculate_index_ranges.png" src="../_images/recalculate_index_ranges.png" />
+<p>This triggers the following log output:</p>
+<div class="highlight-python"><div class="highlight"><pre>INFO : org.graylog2.rest.resources.system.DeflectorResource - Cycling deflector. Reason: REST request.
+INFO : org.graylog2.indexer.Deflector - Cycling deflector to next index now.
+INFO : org.graylog2.indexer.Deflector - Cycling from &lt;graylog2_90&gt; to &lt;graylog2_91&gt;
+INFO : org.graylog2.indexer.Deflector - Creating index target &lt;graylog2_91&gt;...
+INFO : org.graylog2.indexer.Deflector - Done!
+INFO : org.graylog2.indexer.Deflector - Pointing deflector to new target index....
+INFO : org.graylog2.indexer.Deflector - Flushing old index &lt;graylog2_90&gt;.
+INFO : org.graylog2.indexer.Deflector - Setting old index &lt;graylog2_90&gt; to read-only.
+INFO : org.graylog2.system.jobs.SystemJobManager - Submitted SystemJob &lt;a05e0d60-5c34-11e3-8df7-4c8d79f2b596&gt; [org.graylog2.indexer.indices.jobs.OptimizeIndexJob]
+INFO : org.graylog2.indexer.Deflector - Done!
+INFO : org.graylog2.indexer.indices.jobs.OptimizeIndexJob - Optimizing index &lt;graylog2_90&gt;.
+INFO : org.graylog2.system.jobs.SystemJobManager - SystemJob &lt;a05e0d60-5c34-11e3-8df7-4c8d79f2b596&gt; [org.graylog2.indexer.indices.jobs.OptimizeIndexJob] finished in 334ms.
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="indexer_failures.html" class="btn btn-neutral float-right" title="Indexer failures and dead letters" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="load_balancers.html" class="btn btn-neutral" title="Load balancer integration" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
