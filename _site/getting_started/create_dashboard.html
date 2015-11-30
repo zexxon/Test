@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Create Your Dashboard &mdash; Graylog 1.3.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.3.0 documentation" href="../index.html"/> 
+
+  
+  <script src="../static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../getting_started.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Create Your Dashboard</a><ul>
+<li><a class="reference internal" href="#add-a-dashboard">Add a Dashboard</a></li>
+<li><a class="reference internal" href="#add-a-dashboard-widget">Add a Dashboard Widget</a></li>
+<li><a class="reference internal" href="#extra-credit-one-more">Extra Credit - One more</a></li>
+<li><a class="reference internal" href="#extra-credit-graphs">Extra Credit - Graphs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../getting_started.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../getting_started.html">Docs</a> &raquo;</li>
+      
+    <li>Create Your Dashboard</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../sources/getting_started/create_dashboard.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="create-your-dashboard">
+<h1>Create Your Dashboard<a class="headerlink" href="#create-your-dashboard" title="Permalink to this headline">¶</a></h1>
+<p>You should be at a screen like the one below. If you dozed off or went to cook some meatballs, go to System -&gt; Inputs, select the Syslog UDP input you created, and hit Show messages.</p>
+<p>Now it’s go-time.</p>
+<p>You’ve got data coming in, let’s add information to a dashboard to better visualize the data we want to see.</p>
+<div class="section" id="add-a-dashboard">
+<h2>Add a Dashboard<a class="headerlink" href="#add-a-dashboard" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll start by adding the message count data to a dashboard. Click <em>Add count to dashboard</em>, and it will say <em>No Dashboards, create one?</em>   Yes!  Click that.</p>
+<img alt="../images/gs_11-createdash.png" src="../images/gs_11-createdash.png" />
+<p>Give your new dashboard a title and description.</p>
+<img alt="../images/gs_12-titledash.png" src="../images/gs_12-titledash.png" />
+</div>
+<div class="section" id="add-a-dashboard-widget">
+<h2>Add a Dashboard Widget<a class="headerlink" href="#add-a-dashboard-widget" title="Permalink to this headline">¶</a></h2>
+<p>Now it will let you create a widget. In this case, we are creating a widget from our search result of message count in the last 8 hours. I like to put a timeframe in the title, and trends are always a big bowl of sunshine.</p>
+<img alt="../images/gs_13-createwidget.png" src="../images/gs_13-createwidget.png" />
+<p>When you hit create - <em>wa la!</em>  Nothing happens.  All you UX types, relax, we know.  For now, click Dashboards and then the name of your dashboard.</p>
+<img alt="../images/gs_14-clickdash.png" src="../images/gs_14-clickdash.png" />
+<p>And you&#8217;ll end up with the widget you created!</p>
+<img alt="../images/gs_15-widget.png" src="../images/gs_15-widget.png" />
+</div>
+<div class="section" id="extra-credit-one-more">
+<h2>Extra Credit - One more<a class="headerlink" href="#extra-credit-one-more" title="Permalink to this headline">¶</a></h2>
+<p>Let’s add a widget for root activity, because that sounds like it may actually be useful. We need to start with a search query for root. Click <em>Search</em>. Type root in the search and select your timeframe. Once the search results come in, click <em>Add count to the dashboard</em>.</p>
+<img alt="../images/gs_16-search.png" src="../images/gs_16-search.png" />
+<p>Give your chart a title and hit <em>Create</em>.</p>
+<img alt="../images/gs_17-crwidget.png" src="../images/gs_17-crwidget.png" />
+<p>The new widget is now on the screen.  Goob job - you’ve got this!</p>
+<img alt="../images/gs_18-dashboard2.png" src="../images/gs_18-dashboard2.png" />
+<p>Go play around. If you want to know how to create more exciting charts and graphs, check out the section below.</p>
+</div>
+<div class="section" id="extra-credit-graphs">
+<h2>Extra Credit - Graphs<a class="headerlink" href="#extra-credit-graphs" title="Permalink to this headline">¶</a></h2>
+<p>Let’s start by searching for all messages within the last 1 hour. To do this, click <em>Search</em>, select Search in the last 1 hour, and leave the search bar blank. Once the search results populate, expand the messages field in the Search results sidebar and select <em>Quick Values</em>. Click <em>Add to dashboard</em> to add this entire pie chart and data table to your dashboard.</p>
+<img alt="../images/gs_19-graphdash.png" src="../images/gs_19-graphdash.png" />
+<p>I like to track password changes, privilege assignments, root activity, system events, user logins, etc.  Go knock yourself out and show your co-workers.</p>
+<p>Once you have a few widgets in your dashboard, go into unlock / edit mode to quickly edit any widget, rearrange them on your dashboard, or delete. Make sure to click Lock to save!</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../static/jquery.js"></script>
+      <script type="text/javascript" src="../static/underscore.js"></script>
+      <script type="text/javascript" src="../static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

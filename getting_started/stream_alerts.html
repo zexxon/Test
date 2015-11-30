@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Alerts (Triggers &amp; Notifications) &mdash; Graylog 1.3.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Graylog 1.3.0 documentation" href="../index.html"/> 
+
+  
+  <script src="../static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../getting_started.html" class="icon icon-home"> Graylog
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <!-- Local TOC -->
+                <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Alerts (Triggers &amp; Notifications)</a><ul>
+<li><a class="reference internal" href="#create-a-stream">Create a Stream</a></li>
+<li><a class="reference internal" href="#create-a-stream-rule">Create a Stream Rule</a></li>
+<li><a class="reference internal" href="#create-the-alert">Create the Alert</a></li>
+<li><a class="reference internal" href="#send-a-test-email">Send a Test Email</a></li>
+<li><a class="reference internal" href="#going-further">Going Further</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../getting_started.html">Graylog</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../getting_started.html">Docs</a> &raquo;</li>
+      
+    <li>Alerts (Triggers &amp; Notifications)</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../sources/getting_started/stream_alerts.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="alerts-triggers-notifications">
+<h1>Alerts (Triggers &amp; Notifications)<a class="headerlink" href="#alerts-triggers-notifications" title="Permalink to this headline">¶</a></h1>
+<p>Let’s configure some proactive alerts to let us know when something needs our attention.</p>
+<div class="section" id="create-a-stream">
+<h2>Create a Stream<a class="headerlink" href="#create-a-stream" title="Permalink to this headline">¶</a></h2>
+<p>In order to set up an alert, we need to create a stream first. Streams process incoming messages real time based on simple and/or conditions. Click <em>Streams</em>.</p>
+<img alt="../images/gs_20-crstream.png" src="../images/gs_20-crstream.png" />
+<p>Let’s create a stream for all incoming security/authentication error messages.  Click Create Stream.</p>
+<p>Type in a Title and Description.</p>
+<img alt="../images/gs_21-streamtitle.png" src="../images/gs_21-streamtitle.png" />
+</div>
+<div class="section" id="create-a-stream-rule">
+<h2>Create a Stream Rule<a class="headerlink" href="#create-a-stream-rule" title="Permalink to this headline">¶</a></h2>
+<p>Next, we are going to configure the stream to process Syslog UDP input messages for any security alerts.</p>
+<p>Hit the <em>Edit rules</em> button.</p>
+<img alt="../images/gs_22-editrules.png" src="../images/gs_22-editrules.png" />
+<p>Pick the Syslog UDP Input, and click Add stream rule.</p>
+<img alt="../images/gs_23-streamrule.png" src="../images/gs_23-streamrule.png" />
+<p>Then, type in the values shown below and hit save.</p>
+<p>Then click I’m done!</p>
+<p>We have just configured this stream to process in real time all the messages that are from the security/authorization facility.</p>
+</div>
+<div class="section" id="create-the-alert">
+<h2>Create the Alert<a class="headerlink" href="#create-the-alert" title="Permalink to this headline">¶</a></h2>
+<p>You can now either output your new stream to a 3rd party application or database, and/or trigger an alert to notify you in real time when a message that matches a stream.</p>
+<p>Let’s create an alert that will email us when there are more than 2 messages in the last 2 minutes . Click <em>Manage Alerts</em>.</p>
+<img alt="../images/gs_24-alert.png" src="../images/gs_24-alert.png" />
+<p>In the Add new alert condition section, let’s configure and add a new alert. Select message count condition, and configure the rest based on my screenshot (input 2’s in every field). Then click Add alert condition.</p>
+<img alt="../images/gs_25-alertcondition.png" src="../images/gs_25-alertcondition.png" />
+</div>
+<div class="section" id="send-a-test-email">
+<h2>Send a Test Email<a class="headerlink" href="#send-a-test-email" title="Permalink to this headline">¶</a></h2>
+<p>In the Callbacks section,  select email alert callback, and input your email address in the Receivers section. After you’ve added a callback type and receiver, hit the blue ‘Send test alert’ button.</p>
+<img alt="../images/gs_26-alertemail.png" src="../images/gs_26-alertemail.png" />
+</div>
+<div class="section" id="going-further">
+<h2>Going Further<a class="headerlink" href="#going-further" title="Permalink to this headline">¶</a></h2>
+<p>If you want to configure an SMTP server, you can refer to the <a class="reference external" href="http://docs.graylog.org/en/latest/pages/installation/graylog_ctl.html?highlight=email">this documentation</a>.</p>
+<p>If you want to make this stream active, just go back to Streams and where you see the stream name, click the green <em>Start stream</em> button.</p>
+<img alt="../images/gs_27-streamactive.png" src="../images/gs_27-streamactive.png" />
+<p>Tomorrow you can configure all your own logs and alerts.  To help, go and get some deep knowledge in the official <a class="reference external" href="http://docs.graylog.org/en/latest/">documentation</a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015 Graylog, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../static/jquery.js"></script>
+      <script type="text/javascript" src="../static/underscore.js"></script>
+      <script type="text/javascript" src="../static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
