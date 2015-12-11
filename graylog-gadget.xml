@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Graylog Dashboard" height="250" scaling="false" />
+  <Content type="html">
+  <![CDATA[
+<div id="kf-embed-container-678a90d5a10b39f503275dd323d2f582"></div>
+<script type="text/javascript" src="https://ae0521ba008c6c6dd67f-667e6d5e490a1bc46688be42ea525d83.ssl.cf1.rackcdn.com/kf_embed_api-20131030.js"></script>
+<script type="text/javascript">
+KF.embed.embedKlip({
+   profile : "678a90d5a10b39f503275dd323d2f582",
+   settings : {"width":423,"theme":"light","borderStyle":"round","borderColor":"#cccccc"},
+   title : "Graylog All Time Product Usage"
+});
+</script>  
+]]>
+  </Content>
+</Module>
