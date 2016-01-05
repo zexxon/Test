@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Graylog Dashboard" height="500" scaling="true" />
+  <ModulePrefs title="Graylog Opt Outs" height="500" scaling="true" />
   <Content type="html">
   <![CDATA[
 <div id="kf-embed-container-40cd093951947e5fca2d1f887892594d"></div>
