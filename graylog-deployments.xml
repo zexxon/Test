@@ -1,0 +1,18 @@
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Graylog Deployments Over Time" height="500" scaling="true" />
+  <Content type="html">
+  <![CDATA[
+<div id="kf-embed-container-8f21e84a7f6cf418c64244a950218dbc"></div>
+<script type="text/javascript" src="https://ae0521ba008c6c6dd67f-667e6d5e490a1bc46688be42ea525d83.ssl.cf1.rackcdn.com/kf_embed_api-20131030.js"></script>
+<script type="text/javascript">
+KF.embed.embedKlip({
+   profile : "8f21e84a7f6cf418c64244a950218dbc",
+   settings : {"width":1296,"theme":"dark","borderStyle":"round","borderColor":"#cccccc"},
+   title : "Total Graylog Deployments"
+});
+</script>  
+]]>
+  </Content>
+</Module>
